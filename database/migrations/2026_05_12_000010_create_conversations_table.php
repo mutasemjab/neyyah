@@ -8,8 +8,6 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::dropIfExists('conversations');
-
         Schema::create('conversations', function (Blueprint $table) {
             $table->ulid('id')->primary();
             $table->foreignUlid('user1_id')->constrained('users')->cascadeOnDelete();

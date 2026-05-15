@@ -8,8 +8,6 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::dropIfExists('guided_answers');
-
         Schema::create('guided_answers', function (Blueprint $table) {
             $table->ulid('id')->primary();
             $table->foreignUlid('conversation_id')->constrained('conversations')->cascadeOnDelete();

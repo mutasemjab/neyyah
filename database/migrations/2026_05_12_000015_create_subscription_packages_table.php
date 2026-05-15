@@ -8,8 +8,6 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::dropIfExists('subscription_packages');
-
         Schema::create('subscription_packages', function (Blueprint $table) {
             $table->ulid('id')->primary();
             $table->string('name_ar', 60);

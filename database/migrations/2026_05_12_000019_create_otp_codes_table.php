@@ -8,8 +8,6 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::dropIfExists('otp_codes');
-
         Schema::create('otp_codes', function (Blueprint $table) {
             $table->ulid('id')->primary();
             $table->string('phone', 20);

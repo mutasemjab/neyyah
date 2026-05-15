@@ -8,8 +8,6 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::dropIfExists('intent_cards');
-
         Schema::create('intent_cards', function (Blueprint $table) {
             $table->ulid('id')->primary();
             $table->foreignUlid('user_id')->unique()->constrained('users')->cascadeOnDelete();

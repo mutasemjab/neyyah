@@ -8,8 +8,6 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::dropIfExists('match_filters');
-
         Schema::create('match_filters', function (Blueprint $table) {
             $table->ulid('id')->primary();
             $table->foreignUlid('user_id')->unique()->constrained('users')->cascadeOnDelete();

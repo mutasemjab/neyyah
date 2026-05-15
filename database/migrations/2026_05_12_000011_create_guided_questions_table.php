@@ -8,8 +8,6 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::dropIfExists('guided_questions');
-
         Schema::create('guided_questions', function (Blueprint $table) {
             $table->ulid('id')->primary();
             $table->text('text_ar');

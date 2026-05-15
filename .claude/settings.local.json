@@ -10,7 +10,8 @@
       "PowerShell(New-Item -ItemType Directory -Force -Path \"c:\\\\xampp\\\\htdocs\\\\neyyah\\\\app\\\\Console\\\\Commands\\\\Subscriptions\")",
       "Read(//c/Users/LOQ/.claude/projects/c--xampp-htdocs-neyyah/memory/**)",
       "Bash(php -r \"echo file_exists\\('vendor/google/apiclient/src/Client.php'\\) ? 'google/apiclient: YES' : 'google/apiclient: MISSING';\")",
-      "Bash(php -r \"echo file_exists\\('vendor/intervention/image/src/Image.php'\\) ? 'intervention/image: YES' : 'intervention/image: MISSING';\")"
+      "Bash(php -r \"echo file_exists\\('vendor/intervention/image/src/Image.php'\\) ? 'intervention/image: YES' : 'intervention/image: MISSING';\")",
+      "Bash(Remove-Item database/migrations/2014_10_12_000000_create_users_table.php, database/migrations/2026_05_09_143517_create_user_profiles_table.php, database/migrations/2026_05_09_143557_create_user_photos_table.php, database/migrations/2026_05_09_143654_create_interests_table.php, database/migrations/2026_05_09_143706_create_user_interests_table.php, database/migrations/2026_05_09_143758_create_user_privacy_settings_table.php, database/migrations/2026_05_09_143830_create_user_intent_cards_table.php, database/migrations/2026_05_09_143911_create_daily_suggestions_table.php, database/migrations/2026_05_09_144010_create_match_requests_table.php, database/migrations/2026_05_09_144108_create_conversations_table.php, database/migrations/2026_05_09_144130_create_guided_questions_table.php, database/migrations/2026_05_09_144200_add_conversation_fk_to_match_requests_table.php, database/migrations/2026_05_09_144228_create_guided_answers_table.php, database/migrations/2026_05_09_144314_create_blocks_table.php, database/migrations/2026_05_09_144337_create_reports_table.php, database/migrations/2026_05_09_144359_create_notifications_table.php, database/migrations/2026_05_09_144452_create_identity_verifications_table.php -ErrorAction Stop)"
     ]
   }
 }

@@ -8,8 +8,6 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::dropIfExists('user_interest_labels');
-
         Schema::create('user_interest_labels', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->foreignUlid('user_id')->constrained('users')->cascadeOnDelete();
