@@ -199,7 +199,6 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         App\Providers\GlobalViewServiceProvider::class,
-        // Izal\Knet\ServiceProvider::class,
 
         Spatie\Permission\PermissionServiceProvider::class,
 
