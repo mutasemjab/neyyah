@@ -1,5 +1,5 @@
 <?php
 
 return [
-    'credentials' => env('FIREBASE_CREDENTIALS', 'firebase-credentials.json'),
+    'credentials' => env('FIREBASE_CREDENTIALS_PATH', 'firebase-credentials.json'),
 ];
