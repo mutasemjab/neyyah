@@ -1,0 +1,736 @@
+{
+  "info": {
+    "name": "Neyyah API v1",
+    "_postman_id": "neyyah-api-v1",
+    "description": "Complete API collection for Neyyah (نية) matrimonial app.\n\nBase URL: {{base_url}}\nAuth: Bearer token (obtained from verify-otp)\n\nFlow:\n1. POST auth/send-otp  → get code in response (dev mode)\n2. POST auth/verify-otp → token auto-saved to {{token}}\n3. Use any protected endpoint",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "base_url",         "value": "http://localhost/neyyah/public/api/v1", "type": "string" },
+    { "key": "token",            "value": "", "type": "string" },
+    { "key": "user_id",          "value": "", "type": "string" },
+    { "key": "target_user_id",   "value": "", "type": "string" },
+    { "key": "request_id",       "value": "", "type": "string" },
+    { "key": "conversation_id",  "value": "", "type": "string" },
+    { "key": "question_id",      "value": "", "type": "string" },
+    { "key": "notification_id",  "value": "", "type": "string" }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+  },
+  "item": [
+
+    {
+      "name": "🔐 Auth",
+      "item": [
+        {
+          "name": "Send OTP",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "options": { "raw": { "language": "json" } },
+              "raw": "{\n  \"phone\": \"+962791234567\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/auth/send-otp", "host": ["{{base_url}}"], "path": ["auth","send-otp"] }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var json = pm.response.json();",
+                  "if (json.data && json.data.code) {",
+                  "  pm.collectionVariables.set('otp_code', json.data.code);",
+                  "  console.log('OTP code:', json.data.code);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Verify OTP (Login / Register)",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "options": { "raw": { "language": "json" } },
+              "raw": "{\n  \"phone\": \"+962791234567\",\n  \"code\": \"{{otp_code}}\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/auth/verify-otp", "host": ["{{base_url}}"], "path": ["auth","verify-otp"] }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var json = pm.response.json();",
+                  "if (json.data && json.data.token) {",
+                  "  pm.collectionVariables.set('token', json.data.token);",
+                  "  pm.collectionVariables.set('user_id', json.data.user.id);",
+                  "  console.log('Token saved. is_new:', json.data.is_new);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Refresh Token",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": { "raw": "{{base_url}}/auth/refresh-token", "host": ["{{base_url}}"], "path": ["auth","refresh-token"] }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var json = pm.response.json();",
+                  "if (json.data && json.data.token) {",
+                  "  pm.collectionVariables.set('token', json.data.token);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": { "raw": "{{base_url}}/auth/logout", "host": ["{{base_url}}"], "path": ["auth","logout"] }
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "🏙️ Cities (Public)",
+      "item": [
+        {
+          "name": "Get All Cities",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": { "raw": "{{base_url}}/cities", "host": ["{{base_url}}"], "path": ["cities"] }
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "👤 Profile",
+      "item": [
+        {
+          "name": "Get My Profile",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": { "raw": "{{base_url}}/profile/me", "host": ["{{base_url}}"], "path": ["profile","me"] }
+          }
+        },
+        {
+          "name": "Update My Profile",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "options": { "raw": { "language": "json" } },
+              "raw": "{\n  \"display_name\": \"Ahmad Al-Jordani\",\n  \"birth_date\": \"1995-06-15\",\n  \"gender\": \"male\",\n  \"city\": \"Amman\",\n  \"bio\": \"أحب القراءة والطبيعة وأبحث عن شريكة حياة مناسبة.\",\n  \"religiosity_level\": \"moderate\",\n  \"education_level\": \"university\",\n  \"income_range\": \"medium\",\n  \"is_smoker\": false,\n  \"marriage_timeline\": \"within_year\",\n  \"is_ready_for_marriage\": true,\n  \"latitude\": 31.9539,\n  \"longitude\": 35.9106,\n  \"firebase_uid\": \"firebase_uid_here\",\n  \"interests\": [\"القراءة\", \"الرياضة\", \"الطبخ\"]\n}"
+            },
+            "url": { "raw": "{{base_url}}/profile/me", "host": ["{{base_url}}"], "path": ["profile","me"] }
+          }
+        },
+        {
+          "name": "Setup Profile (First-Time)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "options": { "raw": { "language": "json" } },
+              "raw": "{\n  \"display_name\": \"Ahmad Al-Jordani\",\n  \"birth_date\": \"1995-06-15\",\n  \"gender\": \"male\",\n  \"city\": \"Amman\",\n  \"bio\": \"أحب القراءة وأبحث عن شريكة حياة مناسبة.\",\n  \"religiosity_level\": \"moderate\",\n  \"education_level\": \"university\",\n  \"income_range\": \"medium\",\n  \"is_smoker\": false,\n  \"marriage_timeline\": \"within_year\",\n  \"is_ready_for_marriage\": true,\n  \"firebase_uid\": \"firebase_uid_here\",\n  \"interests\": [\"القراءة\", \"الرياضة\"],\n  \"children_intent\": \"yes\",\n  \"open_to_working_partner\": true,\n  \"living_preference\": \"independent\",\n  \"target_timeline\": \"within_year\",\n  \"additional_notes\": \"ملاحظات إضافية\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/profile/setup", "host": ["{{base_url}}"], "path": ["profile","setup"] }
+          }
+        },
+        {
+          "name": "Upload Profile Image",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "image",
+                  "type": "file",
+                  "src": "",
+                  "description": "Image file (jpg/png/webp, max 5MB)"
+                }
+              ]
+            },
+            "url": { "raw": "{{base_url}}/profile/me/images", "host": ["{{base_url}}"], "path": ["profile","me","images"] }
+          }
+        },
+        {
+          "name": "Delete Profile Image",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{base_url}}/profile/me/images/1",
+              "host": ["{{base_url}}"],
+              "path": ["profile","me","images","1"],
+              "description": "Replace 1 with the sort_order of the image"
+            }
+          }
+        },
+        {
+          "name": "Update Intent Card",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "options": { "raw": { "language": "json" } },
+              "raw": "{\n  \"children_intent\": \"yes\",\n  \"open_to_working_partner\": true,\n  \"living_preference\": \"independent\",\n  \"target_timeline\": \"within_year\",\n  \"additional_notes\": \"أفضل أن تكون الزوجة مقيمة في عمّان\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/profile/me/intent-card", "host": ["{{base_url}}"], "path": ["profile","me","intent-card"] }
+          }
+        },
+        {
+          "name": "Update Privacy Settings",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "options": { "raw": { "language": "json" } },
+              "raw": "{\n  \"show_age\": true,\n  \"show_city\": true,\n  \"show_photos_to_matches_only\": false\n}"
+            },
+            "url": { "raw": "{{base_url}}/profile/me/privacy", "host": ["{{base_url}}"], "path": ["profile","me","privacy"] }
+          }
+        },
+        {
+          "name": "View Another User's Profile",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{base_url}}/profile/{{target_user_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["profile","{{target_user_id}}"]
+            }
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "🔍 Matching",
+      "item": [
+        {
+          "name": "Get Suggestions",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{base_url}}/matching/suggestions?page=1&per_page=10",
+              "host": ["{{base_url}}"],
+              "path": ["matching","suggestions"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "per_page", "value": "10" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Record Profile View (costs 1 coin)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{base_url}}/matching/suggestions/{{target_user_id}}/view",
+              "host": ["{{base_url}}"],
+              "path": ["matching","suggestions","{{target_user_id}}","view"]
+            }
+          }
+        },
+        {
+          "name": "Dismiss Suggestion",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{base_url}}/matching/suggestions/{{target_user_id}}/dismiss",
+              "host": ["{{base_url}}"],
+              "path": ["matching","suggestions","{{target_user_id}}","dismiss"]
+            }
+          }
+        },
+        {
+          "name": "Get Match Filters",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": { "raw": "{{base_url}}/matching/filters", "host": ["{{base_url}}"], "path": ["matching","filters"] }
+          }
+        },
+        {
+          "name": "Update Match Filters",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "options": { "raw": { "language": "json" } },
+              "raw": "{\n  \"min_age\": 22,\n  \"max_age\": 35,\n  \"cities\": [\"Amman\", \"Irbid\"],\n  \"religiosity_levels\": [\"moderate\", \"religious\"],\n  \"education_levels\": [\"university\", \"postgraduate\"],\n  \"no_smokers\": true,\n  \"max_distance_km\": 50,\n  \"marriage_timelines\": [\"within_year\", \"within_two_years\"]\n}"
+            },
+            "url": { "raw": "{{base_url}}/matching/filters", "host": ["{{base_url}}"], "path": ["matching","filters"] }
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "💍 Marriage Requests",
+      "item": [
+        {
+          "name": "Send Marriage Request (costs 2 coins)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "options": { "raw": { "language": "json" } },
+              "raw": "{\n  \"to_user_id\": \"{{target_user_id}}\",\n  \"reason_for_interest\": \"أعجبني شخصيتها واهتمامها بالدين والأسرة.\",\n  \"life_goals\": \"أريد بناء أسرة مستقرة ومتوازنة.\",\n  \"marriage_expectations\": \"أتوقع شراكة حياتية قائمة على الاحترام والتفاهم.\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/requests", "host": ["{{base_url}}"], "path": ["requests"] }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var json = pm.response.json();",
+                  "if (json.data && json.data.id) {",
+                  "  pm.collectionVariables.set('request_id', json.data.id);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Incoming Requests",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{base_url}}/requests/incoming?page=1",
+              "host": ["{{base_url}}"],
+              "path": ["requests","incoming"],
+              "query": [{ "key": "page", "value": "1" }]
+            }
+          }
+        },
+        {
+          "name": "Get Sent Requests",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{base_url}}/requests/sent?page=1",
+              "host": ["{{base_url}}"],
+              "path": ["requests","sent"],
+              "query": [{ "key": "page", "value": "1" }]
+            }
+          }
+        },
+        {
+          "name": "Get Request Details",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{base_url}}/requests/{{request_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["requests","{{request_id}}"]
+            }
+          }
+        },
+        {
+          "name": "Accept Request",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{base_url}}/requests/{{request_id}}/accept",
+              "host": ["{{base_url}}"],
+              "path": ["requests","{{request_id}}","accept"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var json = pm.response.json();",
+                  "if (json.data && json.data.conversation_id) {",
+                  "  pm.collectionVariables.set('conversation_id', json.data.conversation_id);",
+                  "  console.log('Conversation created:', json.data.conversation_id);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Reject Request",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{base_url}}/requests/{{request_id}}/reject",
+              "host": ["{{base_url}}"],
+              "path": ["requests","{{request_id}}","reject"]
+            }
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "💬 Conversations",
+      "item": [
+        {
+          "name": "List My Conversations",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{base_url}}/conversations?page=1",
+              "host": ["{{base_url}}"],
+              "path": ["conversations"],
+              "query": [{ "key": "page", "value": "1" }]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var json = pm.response.json();",
+                  "if (json.data && json.data.data && json.data.data.length > 0) {",
+                  "  pm.collectionVariables.set('conversation_id', json.data.data[0].id);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Conversation Details",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{base_url}}/conversations/{{conversation_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["conversations","{{conversation_id}}"]
+            }
+          }
+        },
+        {
+          "name": "Get Guided Questions + Answers",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{base_url}}/conversations/{{conversation_id}}/questions",
+              "host": ["{{base_url}}"],
+              "path": ["conversations","{{conversation_id}}","questions"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var json = pm.response.json();",
+                  "if (json.data && json.data.questions && json.data.questions.length > 0) {",
+                  "  pm.collectionVariables.set('question_id', json.data.questions[0].question.id);",
+                  "  console.log('First question ID saved:', json.data.questions[0].question.id);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Answer Guided Question",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "options": { "raw": { "language": "json" } },
+              "raw": "{\n  \"answer_text\": \"أتصور حياة زوجية قائمة على التفاهم والاحترام المتبادل والتعاون في بناء الأسرة.\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/conversations/{{conversation_id}}/questions/{{question_id}}/answer",
+              "host": ["{{base_url}}"],
+              "path": ["conversations","{{conversation_id}}","questions","{{question_id}}","answer"]
+            }
+          }
+        },
+        {
+          "name": "Update Stage",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "options": { "raw": { "language": "json" } },
+              "raw": "{\n  \"stage\": \"ihtimam\"\n}\n\n// Stages in order: taaaruf → ihtimam → jiddiyya → family → khitba"
+            },
+            "url": {
+              "raw": "{{base_url}}/conversations/{{conversation_id}}/stage",
+              "host": ["{{base_url}}"],
+              "path": ["conversations","{{conversation_id}}","stage"]
+            }
+          }
+        },
+        {
+          "name": "Update Last Activity (ping)",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{base_url}}/conversations/{{conversation_id}}/last-activity",
+              "host": ["{{base_url}}"],
+              "path": ["conversations","{{conversation_id}}","last-activity"]
+            }
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "🪙 Coins",
+      "item": [
+        {
+          "name": "Get Wallet Balance",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": { "raw": "{{base_url}}/coins/wallet", "host": ["{{base_url}}"], "path": ["coins","wallet"] }
+          }
+        },
+        {
+          "name": "Claim Daily Free Coins",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": { "raw": "{{base_url}}/coins/claim-daily", "host": ["{{base_url}}"], "path": ["coins","claim-daily"] }
+          }
+        },
+        {
+          "name": "Earn Coins (ad/share/invite)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "options": { "raw": { "language": "json" } },
+              "raw": "{\n  \"type\": \"ad\"\n}\n\n// type: ad (+1) | share (+2) | invite (+5)"
+            },
+            "url": { "raw": "{{base_url}}/coins/earn", "host": ["{{base_url}}"], "path": ["coins","earn"] }
+          }
+        },
+        {
+          "name": "Get Transaction History",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{base_url}}/coins/transactions?page=1",
+              "host": ["{{base_url}}"],
+              "path": ["coins","transactions"],
+              "query": [{ "key": "page", "value": "1" }]
+            }
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "⭐ Subscriptions",
+      "item": [
+        {
+          "name": "List Packages",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": { "raw": "{{base_url}}/subscriptions/packages", "host": ["{{base_url}}"], "path": ["subscriptions","packages"] }
+          }
+        },
+        {
+          "name": "Get Current Subscription",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": { "raw": "{{base_url}}/subscriptions/current", "host": ["{{base_url}}"], "path": ["subscriptions","current"] }
+          }
+        },
+        {
+          "name": "Subscribe to Package",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "options": { "raw": { "language": "json" } },
+              "raw": "{\n  \"package_id\": \"PASTE_PACKAGE_ULID_HERE\",\n  \"payment_reference\": \"knet_txn_001\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/subscriptions/subscribe", "host": ["{{base_url}}"], "path": ["subscriptions","subscribe"] }
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "🔔 Notifications",
+      "item": [
+        {
+          "name": "List Notifications",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{base_url}}/notifications?page=1",
+              "host": ["{{base_url}}"],
+              "path": ["notifications"],
+              "query": [{ "key": "page", "value": "1" }]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var json = pm.response.json();",
+                  "if (json.data && json.data.data && json.data.data.length > 0) {",
+                  "  pm.collectionVariables.set('notification_id', json.data.data[0].id);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Mark Notification as Read",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{base_url}}/notifications/{{notification_id}}/read",
+              "host": ["{{base_url}}"],
+              "path": ["notifications","{{notification_id}}","read"]
+            }
+          }
+        },
+        {
+          "name": "Mark All as Read",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": { "raw": "{{base_url}}/notifications/read-all", "host": ["{{base_url}}"], "path": ["notifications","read-all"] }
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "📱 Device Tokens",
+      "item": [
+        {
+          "name": "Register FCM Token",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "options": { "raw": { "language": "json" } },
+              "raw": "{\n  \"token\": \"fcm_device_token_here\",\n  \"platform\": \"android\"\n}\n\n// platform: android | ios"
+            },
+            "url": { "raw": "{{base_url}}/devices/token", "host": ["{{base_url}}"], "path": ["devices","token"] }
+          }
+        },
+        {
+          "name": "Remove FCM Token (Logout cleanup)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "options": { "raw": { "language": "json" } },
+              "raw": "{\n  \"token\": \"fcm_device_token_here\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/devices/token", "host": ["{{base_url}}"], "path": ["devices","token"] }
+          }
+        }
+      ]
+    }
+
+  ]
+}

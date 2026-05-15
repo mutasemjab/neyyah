@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(if \\(-not \\(Test-Path \"c:\\\\xampp\\\\htdocs\\\\neyyah\\\\app\\\\Services\"\\)\\) { New-Item -ItemType Directory -Path \"c:\\\\xampp\\\\htdocs\\\\neyyah\\\\app\\\\Services\" })",
+      "PowerShell(if \\(-not \\(Test-Path \"c:\\\\xampp\\\\htdocs\\\\neyyah\\\\app\\\\Http\\\\Requests\\\\Api\"\\)\\) { New-Item -ItemType Directory -Force -Path \"c:\\\\xampp\\\\htdocs\\\\neyyah\\\\app\\\\Http\\\\Requests\\\\Api\" })",
+      "PowerShell(if \\(-not \\(Test-Path \"c:\\\\xampp\\\\htdocs\\\\neyyah\\\\app\\\\Http\\\\Resources\"\\)\\) { New-Item -ItemType Directory -Force -Path \"c:\\\\xampp\\\\htdocs\\\\neyyah\\\\app\\\\Http\\\\Resources\" })",
+      "PowerShell(if \\(-not \\(Test-Path \"c:\\\\xampp\\\\htdocs\\\\neyyah\\\\app\\\\Http\\\\Controllers\\\\Api\"\\)\\) { New-Item -ItemType Directory -Force -Path \"c:\\\\xampp\\\\htdocs\\\\neyyah\\\\app\\\\Http\\\\Controllers\\\\Api\" })",
+      "PowerShell(New-Item -ItemType Directory -Force -Path \"c:\\\\xampp\\\\htdocs\\\\neyyah\\\\app\\\\Console\\\\Commands\\\\Coins\")",
+      "PowerShell(New-Item -ItemType Directory -Force -Path \"c:\\\\xampp\\\\htdocs\\\\neyyah\\\\app\\\\Console\\\\Commands\\\\Conversations\")",
+      "PowerShell(New-Item -ItemType Directory -Force -Path \"c:\\\\xampp\\\\htdocs\\\\neyyah\\\\app\\\\Console\\\\Commands\\\\Subscriptions\")",
+      "Read(//c/Users/LOQ/.claude/projects/c--xampp-htdocs-neyyah/memory/**)",
+      "Bash(php -r \"echo file_exists\\('vendor/google/apiclient/src/Client.php'\\) ? 'google/apiclient: YES' : 'google/apiclient: MISSING';\")",
+      "Bash(php -r \"echo file_exists\\('vendor/intervention/image/src/Image.php'\\) ? 'intervention/image: YES' : 'intervention/image: MISSING';\")"
+    ]
+  }
+}

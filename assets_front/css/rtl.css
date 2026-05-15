@@ -1,0 +1,370 @@
+html[dir="rtl"] body {
+    direction: rtl;
+}
+html[dir="rtl"] .right-actions {
+    flex-direction: row-reverse;
+}
+html[dir="rtl"] .topbar-inner {
+    flex-direction: row-reverse;
+}
+html[dir="rtl"] .help {
+    flex-direction: row-reverse;
+    text-align: right;
+}
+html[dir="rtl"] .mobile-panel {
+    /* Anchor to the right and hide off-screen to the right */
+    position: fixed;
+    inset: 0 0 0 auto; /* top right bottom left */
+    width: 320px;
+    max-width: 90%;
+    height: 100%;
+    transform: translateX(110%);
+    transform-origin: right center;
+    transition: transform 0.32s ease;
+    z-index: 9999;
+    background: #fff; /* ensure visible area — adjust to match real panel */
+}
+html[dir="rtl"] .is-open-mobile .mobile-panel,
+html[dir="rtl"] body.is-open-mobile .mobile-panel {
+    transform: translateX(0);
+}
+html[dir="rtl"] .footer-contact li {
+    flex-direction: row-reverse;
+    text-align: right;
+}
+html[dir="rtl"] .footer-contact .ico {
+    margin-left: 6px;
+    margin-right: 0;
+}
+html[dir="rtl"] .cert-list {
+    padding-inline-start: 0;
+    padding-inline-end: 18px;
+    text-align: right;
+}
+html[dir="rtl"] .footer-links {
+    text-align: right;
+}
+html[dir="rtl"] .serve-badge {
+    flex-direction: row-reverse;
+}
+html[dir="rtl"] .brands {
+    background-position: left center;
+}
+html[dir="rtl"] .brands-track {
+    flex-direction: row-reverse;
+}
+html[dir="rtl"] [data-prev] svg {
+    transform: scaleX(-1);
+}
+html[dir="rtl"] [data-next] svg {
+    transform: scaleX(-1);
+}
+html[dir="rtl"] .brands::before {
+    background-position: left center;
+}
+html[dir="rtl"] .services-head {
+    text-align: right;
+}
+html[dir="rtl"] .services::before {
+    background-position: left top;
+}
+html[dir="rtl"] .about-hero__grid {
+    direction: rtl;
+}
+html[dir="rtl"] .about-hero__right {
+    justify-self: start;
+}
+html[dir="rtl"] .about-shell__inner {
+    direction: rtl;
+}
+html[dir="rtl"] .about-tab {
+    text-align: right;
+    border-left: 1px solid #d3cee8;
+    border-right: 1px solid #d3cee8;
+}
+html[dir="rtl"] .about-strip {
+    justify-content: flex-start;
+}
+html[dir="rtl"] .about-breadcrumb {
+    flex-direction: row-reverse;
+}
+html[dir="rtl"] .crumb-sep {
+    transform: scaleX(-1);
+}
+html[dir="rtl"] .about-panels {
+    text-align: right;
+}
+html[dir="rtl"] .news-toprow {
+    flex-direction: row-reverse;
+}
+html[dir="rtl"] .news-tabs {
+    flex-direction: row-reverse;
+}
+html[dir="rtl"] .news-search-ico {
+    left: auto;
+    right: 14px;
+}
+html[dir="rtl"] .news-search input {
+    padding: 0 38px 0 14px;
+    text-align: right;
+}
+html[dir="rtl"] .news-item {
+    grid-template-columns: minmax(0, 1fr) 320px;
+}
+@media (max-width: 768px) {
+    html[dir="rtl"] .news-item {
+        grid-template-columns: 1fr;
+    }
+}
+html[dir="rtl"] .news-item-head {
+    flex-direction: row-reverse;
+}
+html[dir="rtl"] .contact-layout {
+    direction: rtl;
+}
+html[dir="rtl"] .contact-title,
+html[dir="rtl"] .contact-lead {
+    text-align: right;
+}
+html[dir="rtl"] .contact-tab {
+    text-align: center;
+}
+html[dir="rtl"] .contact-info li,
+html[dir="rtl"] .office-list li {
+    flex-direction: row-reverse;
+}
+html[dir="rtl"] .office-list li span:first-child {
+    text-align: left;
+}
+html[dir="rtl"] .office-list li span:last-child {
+    text-align: right;
+}
+html[dir="rtl"] .contact-check {
+    flex-direction: row-reverse;
+}
+html[dir="rtl"] .contact-check-text {
+    text-align: right;
+}
+html[dir="rtl"] .region-item {
+    flex-direction: row-reverse;
+}
+html[dir="rtl"] .career-page {
+    text-align: right;
+}
+html[dir="rtl"] .career-intro-heading {
+    text-align: center;
+}
+html[dir="rtl"] .career-footer-text {
+    text-align: right;
+}
+html[dir="rtl"] .service-shell__inner {
+    direction: rtl;
+}
+html[dir="rtl"] .service-side-btn {
+    text-align: right;
+}
+html[dir="rtl"] .service-head-top {
+    flex-direction: row-reverse;
+}
+html[dir="rtl"] .service-breadcrumb {
+    flex-direction: row-reverse;
+}
+html[dir="rtl"] .svc-sep {
+    transform: scaleX(-1);
+}
+html[dir="rtl"] .service-headbar {
+    text-align: right;
+}
+html[dir="rtl"] .service-blocks {
+    text-align: right;
+}
+html[dir="rtl"] .svc-row {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+}
+html[dir="rtl"] .svc-row-alt {
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+}
+html[dir="rtl"] .svc-feature {
+    flex-direction: row-reverse;
+}
+html[dir="rtl"] .svc-region-item {
+    flex-direction: row-reverse;
+}
+@media (max-width: 768px) {
+    html[dir="rtl"] .svc-row,
+    html[dir="rtl"] .svc-row-alt {
+        grid-template-columns: 1fr;
+    }
+}
+html[dir="rtl"] .svc-contact-hero__inner {
+    text-align: right;
+}
+html[dir="rtl"] .cons-shell__inner {
+    direction: rtl;
+}
+html[dir="rtl"] .cons-side-top,
+html[dir="rtl"] .cons-side-box,
+html[dir="rtl"] .cons-side-logos,
+html[dir="rtl"] .cons-side-bottom {
+    text-align: right;
+}
+html[dir="rtl"] .cons-side-item.is-active {
+    border-left: 0;
+    border-right: 3px solid #9b51e0;
+    padding-left: 14px;
+    padding-right: 11px;
+}
+html[dir="rtl"] .cons-breadcrumb {
+    flex-direction: row-reverse;
+}
+html[dir="rtl"] .cons-body {
+    text-align: right;
+}
+html[dir="rtl"] .cons-key-list {
+    padding-left: 0;
+    padding-right: 18px;
+}
+html[dir="rtl"] .products-shell__inner {
+    direction: rtl;
+}
+html[dir="rtl"] .prod-side-main,
+html[dir="rtl"] .prod-nav-item {
+    flex-direction: row-reverse;
+}
+html[dir="rtl"] .prod-nav-arrow {
+    rotate: 180deg;
+}
+html[dir="rtl"] .prod-partner {
+    text-align: right;
+    align-items: flex-end;
+}
+html[dir="rtl"] .prod-breadcrumb {
+    flex-direction: row-reverse;
+}
+html[dir="rtl"] .prod-body {
+    text-align: right;
+}
+html[dir="rtl"] .pdetail-shell__inner {
+    direction: rtl;
+}
+html[dir="rtl"] .pdetail-headbar,
+html[dir="rtl"] .pdetail-top,
+html[dir="rtl"] .pdetail-panel {
+    text-align: right;
+}
+html[dir="rtl"] .pdetail-features li,
+html[dir="rtl"] .pdetail-feature-list li {
+    padding-left: 0;
+    padding-right: 16px;
+}
+html[dir="rtl"] .pdetail-features li::before {
+    left: auto;
+    right: 0;
+}
+html[dir="rtl"] .pdetail-feature-list li::before {
+    left: auto;
+    right: 0;
+}
+html[dir="rtl"] .pdetail-spec-row {
+    grid-template-columns: minmax(0, 1fr) 200px;
+}
+html[dir="rtl"] .pdetail-spec-label {
+    text-align: right;
+}
+html[dir="rtl"] .pdetail-specialist-contacts {
+    justify-content: flex-end;
+}
+html[dir="rtl"] .pdetail-download-bottom {
+    direction: rtl;
+}
+/* RTL Fixes for Featured Products Carousel */
+/* CRITICAL: Override any RTL transform reversals */
+html[dir="rtl"] .feat-track {
+    /* Do NOT reverse the transform direction */
+    /* JavaScript handles everything with negative translateX */
+    /* transform: none !important; */
+    display: flex;
+    gap: 22px;
+    will-change: transform;
+    transition: transform 0.45s ease;
+}
+
+/* Ensure track stays in correct position */
+html[dir="rtl"] .feat-viewport {
+    direction: rtl !important;
+}
+
+/* But keep card content RTL */
+html[dir="rtl"] .feat-card {
+    direction: rtl;
+}
+
+html[dir="rtl"] .feat-card-content {
+    text-align: right;
+}
+
+html[dir="rtl"] .feat-card-title,
+html[dir="rtl"] .feat-card-text {
+    text-align: right;
+}
+
+/* Fix separator gradient direction */
+html[dir="rtl"] .feat-sep {
+    background: linear-gradient(270deg, #9b51e0 0%, #e1ddf1 100%);
+}
+
+/* Ensure arrows don't get flipped */
+html[dir="rtl"] .featured-arrow svg {
+    transform: none;
+    rotate: 180deg;
+}
+
+/* Fix featured grid alignment */
+html[dir="rtl"] .featured-grid {
+    direction: rtl;
+}
+
+html[dir="rtl"] .featured-left {
+    text-align: right;
+}
+
+html[dir="rtl"] .featured-arrows {
+    justify-content: flex-end;
+}
+
+@media (max-width: 900px) {
+    html[dir="rtl"] .featured-left {
+        text-align: center;
+    }
+    html[dir="rtl"] .featured-arrows {
+        justify-content: center;
+    }
+}
+
+/* Make sure the track container allows proper sliding */
+.feat-viewport {
+    overflow: scroll;
+    scrollbar-width: none;
+    position: relative;
+}
+
+.feat-track {
+    display: flex;
+    gap: 22px;
+    will-change: transform;
+    /* Ensure transform origin is consistent */
+    transform-origin: left center;
+    display: flex;
+    gap: 22px;
+    will-change: transform;
+    transition: transform 0.45s ease;
+}
+
+html[dir="rtl"] .feat-track {
+    /* Keep same origin even in RTL */
+    transform-origin: left center !important;
+    display: flex;
+    gap: 22px;
+    will-change: transform;
+    transition: transform 0.45s ease;
+}
