@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Admin;
-use App\Models\MatchRequest;
+use App\Models\MarriageRequest;
 use Illuminate\Http\Request;
 
 class MatchRequestAdminController extends Controller
@@ -23,25 +23,25 @@ class MatchRequestAdminController extends Controller
             return redirect()->back()->with('error', __('messages.Access Denied'));
         }
 
-        $query = MatchRequest::with('fromUser.profile', 'toUser.profile');
+        $query = MarriageRequest::with('fromUser', 'toUser');
 
         if ($request->filled('status')) {
             $query->where('status', $request->status);
         }
 
-        $data         = $query->latest()->paginate(PAGINATION_COUNT);
+        $data         = $query->latest('sent_at')->paginate(PAGINATION_COUNT);
         $statusFilter = $request->status;
 
         return view('admin.match-requests.index', compact('data', 'statusFilter'));
     }
 
-    public function show(int $id)
+    public function show(string $id)
     {
         if (!$this->admin()->can('match-requests-index')) {
             return redirect()->back()->with('error', __('messages.Access Denied'));
         }
 
-        $matchRequest = MatchRequest::with('fromUser.profile', 'toUser.profile', 'conversation')
+        $matchRequest = MarriageRequest::with('fromUser', 'toUser', 'conversation')
             ->findOrFail($id);
 
         return view('admin.match-requests.show', compact('matchRequest'));

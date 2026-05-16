@@ -28,13 +28,13 @@
                         <div class="col-6 text-center">
                             <strong class="d-block mb-1">{{ __('messages.From_User') }}</strong>
                             <a href="{{ route('admin.users.show', $matchRequest->from_user_id) }}">
-                                {{ $matchRequest->fromUser->profile->display_name ?? $matchRequest->fromUser->phone }}
+                                {{ $matchRequest->fromUser->display_name ?? $matchRequest->fromUser->phone }}
                             </a>
                         </div>
                         <div class="col-6 text-center">
                             <strong class="d-block mb-1">{{ __('messages.To_User') }}</strong>
                             <a href="{{ route('admin.users.show', $matchRequest->to_user_id) }}">
-                                {{ $matchRequest->toUser->profile->display_name ?? $matchRequest->toUser->phone }}
+                                {{ $matchRequest->toUser->display_name ?? $matchRequest->toUser->phone }}
                             </a>
                         </div>
                     </div>
@@ -46,15 +46,15 @@
                         @endphp
                         <span class="badge badge-{{ $c }}">{{ __('messages.' . ucfirst($matchRequest->status)) }}</span>
                     </p>
-                    <p><strong>{{ __('messages.Expires_At') }}:</strong>
-                        {{ $matchRequest->expires_at?->format('Y-m-d H:i') ?? '—' }}</p>
-                    <p><strong>{{ __('messages.Created') }}:</strong>
-                        {{ $matchRequest->created_at->format('Y-m-d H:i') }}</p>
+                    <p><strong>{{ __('messages.Responded_At') }}:</strong>
+                        {{ $matchRequest->responded_at?->format('Y-m-d H:i') ?? '—' }}</p>
+                    <p><strong>{{ __('messages.Sent_At') }}:</strong>
+                        {{ $matchRequest->sent_at?->format('Y-m-d H:i') ?? '—' }}</p>
 
-                    @if ($matchRequest->reason)
+                    @if ($matchRequest->reason_for_interest)
                     <hr>
                     <p><strong>{{ __('messages.Request_Reason') }}:</strong><br>
-                        <span class="text-muted">{{ $matchRequest->reason }}</span></p>
+                        <span class="text-muted">{{ $matchRequest->reason_for_interest }}</span></p>
                     @endif
 
                     @if ($matchRequest->life_goals)

@@ -24,7 +24,7 @@
                 <div class="card-body">
                     {{-- Status Tabs --}}
                     <ul class="nav nav-tabs mb-3">
-                        @foreach (['', 'pending', 'accepted', 'declined', 'expired', 'cancelled'] as $s)
+                        @foreach (['', 'pending', 'accepted', 'declined'] as $s)
                         <li class="nav-item">
                             <a class="nav-link {{ $statusFilter === $s ? 'active' : '' }}"
                                href="{{ route('admin.match-requests.index', $s ? ['status' => $s] : []) }}">
@@ -42,8 +42,8 @@
                                     <th>{{ __('messages.From_User') }}</th>
                                     <th>{{ __('messages.To_User') }}</th>
                                     <th>{{ __('messages.Request_Status') }}</th>
-                                    <th>{{ __('messages.Expires_At') }}</th>
-                                    <th>{{ __('messages.Created') }}</th>
+                                    <th>{{ __('messages.Responded_At') }}</th>
+                                    <th>{{ __('messages.Sent_At') }}</th>
                                     <th>{{ __('messages.Action') }}</th>
                                 </tr>
                             </thead>
@@ -53,12 +53,12 @@
                                     <td>{{ $req->id }}</td>
                                     <td>
                                         <a href="{{ route('admin.users.show', $req->from_user_id) }}">
-                                            {{ $req->fromUser->profile->display_name ?? $req->fromUser->phone }}
+                                            {{ $req->fromUser->display_name ?? $req->fromUser->phone }}
                                         </a>
                                     </td>
                                     <td>
                                         <a href="{{ route('admin.users.show', $req->to_user_id) }}">
-                                            {{ $req->toUser->profile->display_name ?? $req->toUser->phone }}
+                                            {{ $req->toUser->display_name ?? $req->toUser->phone }}
                                         </a>
                                     </td>
                                     <td>
@@ -71,11 +71,11 @@
                                         </span>
                                     </td>
                                     <td>
-                                        <small class="{{ $req->expires_at && $req->expires_at->isPast() ? 'text-danger' : 'text-muted' }}">
-                                            {{ $req->expires_at?->format('Y-m-d') ?? '—' }}
+                                        <small class="text-muted">
+                                            {{ $req->responded_at?->format('Y-m-d') ?? '—' }}
                                         </small>
                                     </td>
-                                    <td><small>{{ $req->created_at->format('Y-m-d') }}</small></td>
+                                    <td><small>{{ $req->sent_at?->format('Y-m-d') ?? '—' }}</small></td>
                                     <td>
                                         <a href="{{ route('admin.match-requests.show', $req->id) }}"
                                            class="btn btn-sm btn-outline-primary">
