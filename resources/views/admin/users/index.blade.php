@@ -76,13 +76,13 @@
                                 <tr>
                                     <td>{{ $user->id }}</td>
                                     <td>
-                                        <strong>{{ $user->profile->display_name ?? '—' }}</strong>
+                                        <strong>{{ $user->display_name ?? '—' }}</strong>
                                     </td>
-                                    <td>{{ $user->country_code }} {{ $user->phone }}</td>
+                                    <td>{{ $user->phone }}</td>
                                     <td>
-                                        @if ($user->profile?->gender === 'male')
+                                        @if ($user->gender === 'male')
                                             <span class="badge badge-info">{{ __('messages.Male') }}</span>
-                                        @elseif ($user->profile?->gender === 'female')
+                                        @elseif ($user->gender === 'female')
                                             <span class="badge badge-danger">{{ __('messages.Female') }}</span>
                                         @else
                                             —
@@ -111,16 +111,12 @@
                                         @endif
                                     </td>
                                     <td>
-                                        @if ($user->profile)
-                                            <div class="progress" style="height:6px; min-width:80px;">
-                                                <div class="progress-bar bg-success"
-                                                     style="width:{{ round($user->profile->completion_pct * 100) }}%">
-                                                </div>
+                                        <div class="progress" style="height:6px; min-width:80px;">
+                                            <div class="progress-bar bg-success"
+                                                 style="width:{{ round($user->completion_pct * 100) }}%">
                                             </div>
-                                            <small>{{ round($user->profile->completion_pct * 100) }}%</small>
-                                        @else
-                                            —
-                                        @endif
+                                        </div>
+                                        <small>{{ round($user->completion_pct * 100) }}%</small>
                                     </td>
                                     <td>
                                         <small class="text-muted">{{ $user->created_at->format('Y-m-d') }}</small>

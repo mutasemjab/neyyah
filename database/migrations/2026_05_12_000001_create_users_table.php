@@ -12,6 +12,7 @@ return new class extends Migration
             $table->ulid('id')->primary();
             $table->string('phone', 20)->unique();
             $table->timestamp('phone_verified_at')->nullable();
+            $table->enum('status', ['pending', 'active', 'suspended', 'banned', 'deleted'])->default('pending');
             $table->string('display_name', 60)->nullable();
             $table->date('birth_date')->nullable();
             $table->string('gender', 10)->nullable();

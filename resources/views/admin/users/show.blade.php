@@ -24,9 +24,9 @@
         <div class="col-md-4">
             <div class="card">
                 <div class="card-body text-center">
-                    @php $mainPhoto = $user->photos->first(); @endphp
+                    @php $mainPhoto = $user->profileImages->first(); @endphp
                     @if ($mainPhoto)
-                        <img src="{{ asset($mainPhoto->photo_path) }}"
+                        <img src="{{ asset($mainPhoto->url) }}"
                              class="rounded-circle img-thumbnail mb-3"
                              style="width:120px;height:120px;object-fit:cover;"
                              alt="">
@@ -37,8 +37,8 @@
                         </div>
                     @endif
 
-                    <h5>{{ $user->profile->display_name ?? '—' }}</h5>
-                    <p class="text-muted mb-1">{{ $user->country_code }} {{ $user->phone }}</p>
+                    <h5>{{ $user->display_name ?? '—' }}</h5>
+                    <p class="text-muted mb-1">{{ $user->phone }}</p>
 
                     @php
                         $statusColors = ['active'=>'success','pending'=>'warning','suspended'=>'secondary','banned'=>'danger'];
@@ -106,75 +106,63 @@
             <div class="card">
                 <div class="card-header"><h6 class="mb-0">{{ __('messages.User_Profile') }}</h6></div>
                 <div class="card-body">
-                    @if ($user->profile)
-                    @php $p = $user->profile; @endphp
                     <div class="row">
                         <div class="col-sm-6">
-                            <p><strong>{{ __('messages.Display_Name') }}:</strong> {{ $p->display_name ?? '—' }}</p>
-                            <p><strong>{{ __('messages.Date_of_Birth') }}:</strong> {{ $p->date_of_birth?->format('Y-m-d') ?? '—' }}</p>
-                            <p><strong>{{ __('messages.Age') }}:</strong> {{ $p->date_of_birth ? $p->age : '—' }}</p>
-                            <p><strong>{{ __('messages.Gender') }}:</strong> {{ $p->gender ? __('messages.' . ucfirst($p->gender)) : '—' }}</p>
-                            <p><strong>{{ __('messages.City') }}:</strong> {{ $p->city ?? '—' }}</p>
-                            <p><strong>{{ __('messages.Country') }}:</strong> {{ $p->country ?? '—' }}</p>
+                            <p><strong>{{ __('messages.Display_Name') }}:</strong> {{ $user->display_name ?? '—' }}</p>
+                            <p><strong>{{ __('messages.Date_of_Birth') }}:</strong> {{ $user->birth_date?->format('Y-m-d') ?? '—' }}</p>
+                            <p><strong>{{ __('messages.Age') }}:</strong> {{ $user->age ?? '—' }}</p>
+                            <p><strong>{{ __('messages.Gender') }}:</strong> {{ $user->gender ? __('messages.' . ucfirst($user->gender)) : '—' }}</p>
+                            <p><strong>{{ __('messages.City') }}:</strong> {{ $user->city ?? '—' }}</p>
                         </div>
                         <div class="col-sm-6">
-                            <p><strong>{{ __('messages.Religiosity') }}:</strong> {{ $p->religiosity ?? '—' }}</p>
-                            <p><strong>{{ __('messages.Education') }}:</strong> {{ $p->education ?? '—' }}</p>
-                            <p><strong>{{ __('messages.Job_Title') }}:</strong> {{ $p->job_title ?? '—' }}</p>
-                            <p><strong>{{ __('messages.Income_Range') }}:</strong> {{ $p->income_range ?? '—' }}</p>
+                            <p><strong>{{ __('messages.Religiosity') }}:</strong> {{ $user->religiosity_level ?? '—' }}</p>
+                            <p><strong>{{ __('messages.Education') }}:</strong> {{ $user->education_level ?? '—' }}</p>
+                            <p><strong>{{ __('messages.Income_Range') }}:</strong> {{ $user->income_range ?? '—' }}</p>
                             <p><strong>{{ __('messages.Is_Smoker') }}:</strong>
-                                {{ $p->is_smoker ? __('messages.Yes') : __('messages.No') }}</p>
-                            <p><strong>{{ __('messages.Marriage_Timeline') }}:</strong> {{ $p->marriage_timeline ?? '—' }}</p>
+                                {{ $user->is_smoker ? __('messages.Yes') : __('messages.No') }}</p>
+                            <p><strong>{{ __('messages.Marriage_Timeline') }}:</strong> {{ $user->marriage_timeline ?? '—' }}</p>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-sm-6">
-                            <p><strong>{{ __('messages.Completion_Pct') }}:</strong>
-                                <div class="progress" style="height:8px;">
-                                    <div class="progress-bar bg-success"
-                                         style="width:{{ round($p->completion_pct * 100) }}%"></div>
-                                </div>
-                                <small>{{ round($p->completion_pct * 100) }}%</small>
-                            </p>
+                            <p><strong>{{ __('messages.Completion_Pct') }}:</strong></p>
+                            <div class="progress" style="height:8px;">
+                                <div class="progress-bar bg-success"
+                                     style="width:{{ round($user->completion_pct * 100) }}%"></div>
+                            </div>
+                            <small>{{ round($user->completion_pct * 100) }}%</small>
                         </div>
                         <div class="col-sm-6">
-                            <p><strong>{{ __('messages.Seriousness_Score') }}:</strong>
-                                <div class="progress" style="height:8px;">
-                                    <div class="progress-bar bg-info"
-                                         style="width:{{ round($p->seriousness_score * 100) }}%"></div>
-                                </div>
-                                <small>{{ round($p->seriousness_score * 100) }}%</small>
-                            </p>
+                            <p><strong>{{ __('messages.Seriousness_Score') }}:</strong></p>
+                            <div class="progress" style="height:8px;">
+                                <div class="progress-bar bg-info"
+                                     style="width:{{ round($user->seriousness_score * 100) }}%"></div>
+                            </div>
+                            <small>{{ round($user->seriousness_score * 100) }}%</small>
                         </div>
                     </div>
-                    @if ($p->bio)
-                    <p><strong>{{ __('messages.Bio') }}:</strong><br>
-                        <span class="text-muted">{{ $p->bio }}</span>
+                    @if ($user->bio)
+                    <p class="mt-2"><strong>{{ __('messages.Bio') }}:</strong><br>
+                        <span class="text-muted">{{ $user->bio }}</span>
                     </p>
-                    @endif
-                    @else
-                        <p class="text-muted">{{ __('messages.No_data') }}</p>
                     @endif
                 </div>
             </div>
 
             {{-- Photos --}}
             <div class="card">
-                <div class="card-header"><h6 class="mb-0">{{ __('messages.Photos') }} ({{ $user->photos->count() }})</h6></div>
+                <div class="card-header"><h6 class="mb-0">{{ __('messages.Photos') }} ({{ $user->profileImages->count() }})</h6></div>
                 <div class="card-body">
-                    @if ($user->photos->count())
+                    @if ($user->profileImages->count())
                     <div class="row">
-                        @foreach ($user->photos as $photo)
+                        @foreach ($user->profileImages as $photo)
                         <div class="col-3 mb-2">
-                            <img src="{{ asset($photo->photo_path) }}"
+                            <img src="{{ asset($photo->url) }}"
                                  class="img-fluid rounded"
                                  style="height:90px;width:100%;object-fit:cover;"
                                  alt="">
                             <small class="d-block text-center text-muted mt-1">
-                                {{ $photo->visibility }}
-                                @if ($photo->is_approved)
-                                    <i class="fas fa-check-circle text-success"></i>
-                                @endif
+                                #{{ $photo->sort_order }}
                             </small>
                         </div>
                         @endforeach
@@ -191,8 +179,7 @@
                 <div class="card-body">
                     @forelse ($user->interests as $interest)
                         <span class="badge badge-light border mr-1 mb-1" style="font-size:0.85rem;">
-                            @if ($interest->icon) {{ $interest->icon }} @endif
-                            {{ app()->getLocale() === 'ar' ? $interest->name_ar : $interest->name_en }}
+                            {{ $interest->label }}
                         </span>
                     @empty
                         <p class="text-muted mb-0">{{ __('messages.No_data') }}</p>
@@ -208,8 +195,8 @@
                     @php $ic = $user->intentCard; @endphp
                     <p><strong>{{ __('messages.Marriage_Timeline') }}:</strong> {{ $ic->target_timeline ?? '—' }}</p>
                     <p><strong>{{ __('messages.Life_Goals') }}:</strong> {{ $ic->children_intent ?? '—' }}</p>
-                    @if ($ic->notes)
-                        <p><strong>{{ __('messages.Bio') }}:</strong> {{ $ic->notes }}</p>
+                    @if ($ic->additional_notes)
+                        <p><strong>{{ __('messages.Notes') }}:</strong> {{ $ic->additional_notes }}</p>
                     @endif
                 </div>
             </div>
@@ -221,7 +208,7 @@
                 <div class="card-body">
                     @if ($user->identityVerification)
                     @php $v = $user->identityVerification; @endphp
-                        <p><strong>{{ __('messages.Document_Type') }}:</strong> {{ __('messages.' . ucfirst($v->document_type ?? 'National_ID')) }}</p>
+                        <p><strong>{{ __('messages.Document_Type') }}:</strong> {{ $v->id_type ?? '—' }}</p>
                         <p><strong>{{ __('messages.Status') }}:</strong>
                             @if ($v->status === 'approved')
                                 <span class="badge badge-success">{{ __('messages.Approved') }}</span>

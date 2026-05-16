@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -10,6 +11,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Str;
 use Laravel\Passport\HasApiTokens;
+use App\Models\Block;
+use App\Models\Report;
+use App\Models\IdentityVerification;
+use App\Models\Conversation;
 
 class User extends Authenticatable
 {
@@ -21,6 +26,7 @@ class User extends Authenticatable
     protected $fillable = [
         'phone',
         'phone_verified_at',
+        'status',
         'display_name',
         'birth_date',
         'gender',
@@ -132,7 +138,27 @@ class User extends Authenticatable
 
     public function conversations(): HasMany
     {
-        return $this->hasMany(Conversation::class, 'user1_id')
+        return $this->hasMany(Conversation::class, 'user1_id');
+    }
+
+    public function allConversations(): Builder
+    {
+        return Conversation::where('user1_id', $this->id)
             ->orWhere('user2_id', $this->id);
+    }
+
+    public function blocks(): HasMany
+    {
+        return $this->hasMany(Block::class, 'blocker_id');
+    }
+
+    public function reports(): HasMany
+    {
+        return $this->hasMany(Report::class, 'reporter_id');
+    }
+
+    public function identityVerification(): HasOne
+    {
+        return $this->hasOne(IdentityVerification::class);
     }
 }

@@ -23,13 +23,13 @@ class UserManagementController extends Controller
             return redirect()->back()->with('error', __('messages.Access Denied'));
         }
 
-        $query = User::with('profile');
+        $query = User::query();
 
         if ($request->filled('search')) {
             $search = $request->search;
             $query->where(function ($q) use ($search) {
                 $q->where('phone', 'like', "%{$search}%")
-                  ->orWhereHas('profile', fn ($p) => $p->where('display_name', 'like', "%{$search}%"));
+                  ->orWhere('display_name', 'like', "%{$search}%");
             });
         }
 
@@ -44,14 +44,14 @@ class UserManagementController extends Controller
         return view('admin.users.index', compact('data', 'searchQuery', 'statusFilter'));
     }
 
-    public function show(int $id)
+    public function show(string $id)
     {
         if (!$this->admin()->can('users-index')) {
             return redirect()->back()->with('error', __('messages.Access Denied'));
         }
 
         $user = User::with([
-            'profile', 'photos', 'interests', 'intentCard',
+            'profileImages', 'interests', 'intentCard',
             'privacySettings', 'identityVerification',
         ])->findOrFail($id);
 
@@ -66,7 +66,7 @@ class UserManagementController extends Controller
         ));
     }
 
-    public function updateStatus(Request $request, int $id)
+    public function updateStatus(Request $request, string $id)
     {
         if (!$this->admin()->can('users-edit')) {
             return redirect()->back()->with('error', __('messages.Access Denied'));
