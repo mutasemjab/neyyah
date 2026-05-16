@@ -66,11 +66,7 @@ Route::group(['prefix' => LaravelLocalization::setLocale(), 'middleware' => ['lo
 
         // ── Interests ─────────────────────────────────────────────────────────
         Route::get('interests', [InterestController::class, 'index'])->name('admin.interests.index');
-        Route::get('interests/create', [InterestController::class, 'create'])->name('admin.interests.create');
-        Route::post('interests', [InterestController::class, 'store'])->name('admin.interests.store');
-        Route::get('interests/{id}/edit', [InterestController::class, 'edit'])->name('admin.interests.edit');
-        Route::patch('interests/{id}', [InterestController::class, 'update'])->name('admin.interests.update');
-        Route::delete('interests/{id}', [InterestController::class, 'destroy'])->name('admin.interests.destroy');
+        Route::delete('interests/{label}', [InterestController::class, 'destroy'])->name('admin.interests.destroy')->where('label', '.+');
 
         // ── Guided Questions ──────────────────────────────────────────────────
         Route::get('guided-questions', [GuidedQuestionController::class, 'index'])->name('admin.guided-questions.index');

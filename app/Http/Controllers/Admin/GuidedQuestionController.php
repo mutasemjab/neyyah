@@ -55,7 +55,6 @@ class GuidedQuestionController extends Controller
             'hint_ar'     => 'nullable|string|max:255',
             'category_ar' => 'nullable|string|max:60',
             'sort_order'  => 'integer|min:0',
-            'version'     => 'integer|min:1',
         ]);
 
         GuidedQuestion::create([
@@ -63,7 +62,6 @@ class GuidedQuestionController extends Controller
             'hint_ar'     => $request->hint_ar,
             'category_ar' => $request->category_ar,
             'sort_order'  => $request->input('sort_order', 0),
-            'version'     => $request->input('version', 1),
             'is_active'   => $request->boolean('is_active', true),
         ]);
 
@@ -71,7 +69,7 @@ class GuidedQuestionController extends Controller
             ->with('success', __('messages.Question_Created'));
     }
 
-    public function edit(int $id)
+    public function edit(string $id)
     {
         if (!$this->admin()->can('guided-questions-edit')) {
             return redirect()->back()->with('error', __('messages.Access Denied'));
@@ -82,7 +80,7 @@ class GuidedQuestionController extends Controller
         return view('admin.guided-questions.edit', compact('question'));
     }
 
-    public function update(Request $request, int $id)
+    public function update(Request $request, string $id)
     {
         if (!$this->admin()->can('guided-questions-edit')) {
             return redirect()->back()->with('error', __('messages.Access Denied'));
@@ -93,7 +91,6 @@ class GuidedQuestionController extends Controller
             'hint_ar'     => 'nullable|string|max:255',
             'category_ar' => 'nullable|string|max:60',
             'sort_order'  => 'integer|min:0',
-            'version'     => 'integer|min:1',
         ]);
 
         GuidedQuestion::findOrFail($id)->update([
@@ -101,7 +98,6 @@ class GuidedQuestionController extends Controller
             'hint_ar'     => $request->hint_ar,
             'category_ar' => $request->category_ar,
             'sort_order'  => $request->input('sort_order', 0),
-            'version'     => $request->input('version', 1),
             'is_active'   => $request->boolean('is_active'),
         ]);
 
@@ -109,7 +105,7 @@ class GuidedQuestionController extends Controller
             ->with('success', __('messages.Question_Updated'));
     }
 
-    public function destroy(Request $request, int $id)
+    public function destroy(Request $request, string $id)
     {
         if (!$this->admin()->can('guided-questions-delete')) {
             return redirect()->back()->with('error', __('messages.Access Denied'));
