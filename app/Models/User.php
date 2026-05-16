@@ -15,6 +15,7 @@ use App\Models\Block;
 use App\Models\Report;
 use App\Models\IdentityVerification;
 use App\Models\Conversation;
+use App\Models\Report as ModelsReport;
 
 class User extends Authenticatable
 {
@@ -152,12 +153,12 @@ class User extends Authenticatable
         return $this->hasMany(Block::class, 'blocker_id');
     }
 
-    public function reports(): HasMany
+    public function reports()
     {
         return $this->hasMany(Report::class, 'reporter_id');
     }
 
-    public function identityVerification(): HasOne
+    public function identityVerification()
     {
         return $this->hasOne(IdentityVerification::class);
     }

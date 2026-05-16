@@ -13,6 +13,7 @@ class OtpCode extends Model
 
     protected $keyType = 'string';
     public $incrementing = false;
+    protected $hidden = ['code', 'hashed_code'];
 
     protected $fillable = [
         'phone',
@@ -38,5 +39,29 @@ class OtpCode extends Model
                 $model->created_at = now();
             }
         });
+    }
+
+    public function isExpired(): bool
+    {
+        return now()->isAfter($this->expires_at);
+    }
+    public function isMaxAttempts(): bool
+    {
+        return $this->attempts >= 5;
+    }
+
+    public function verify(string $code): bool
+    {
+        if ($this->is_used || $this->isExpired() || $this->isMaxAttempts()) {
+            return false;
+        }
+
+        if (hash_equals($this->hashed_code, bcrypt($code))) {
+            $this->update(['is_used' => true, 'used_at' => now()]);
+            return true;
+        }
+
+        $this->increment('attempts');
+        return false;
     }
 }

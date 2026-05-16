@@ -21,13 +21,35 @@ class IdentityVerification extends Model
         'rejection_reason',
         'reviewed_at',
     ];
+    protected $hidden = ['document_front_path', 'document_back_path', 'selfie_path'];
 
     protected $casts = [
         'reviewed_at' => 'datetime',
     ];
 
-    public function user(): BelongsTo
+    public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function reviewer()
+    {
+        return $this->belongsTo(User::class, 'reviewed_by');
+    }
+
+    public function approve(User $admin): void
+    {
+        $this->update(['status' => 'approved', 'reviewed_by' => $admin->id, 'reviewed_at' => now()]);
+        $this->user->update(['is_verified' => true]);
+    }
+
+    public function reject(User $admin, string $reason): void
+    {
+        $this->update([
+            'status'           => 'rejected',
+            'reviewed_by'      => $admin->id,
+            'reviewed_at'      => now(),
+            'rejection_reason' => $reason,
+        ]);
     }
 }
