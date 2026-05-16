@@ -85,7 +85,7 @@ class ProfileController extends ApiController
         $originalPath    = "assets/admin/uploads/profiles/{$filename}.{$extension}";
         $blurredPath     = "assets/admin/uploads/profiles/{$filename}_blurred.{$extension}";
 
-        $uploadDir = public_path('assets/admin/uploads/profiles');
+        $uploadDir = base_path('assets/admin/uploads/profiles');
         if (!is_dir($uploadDir)) {
             mkdir($uploadDir, 0755, true);
         }
@@ -99,7 +99,7 @@ class ProfileController extends ApiController
                         $constraint->aspectRatio();
                         $constraint->upsize();
                     })
-                    ->save(public_path($originalPath));
+                    ->save(base_path($originalPath));
 
                 // Create blurred copy
                 \Intervention\Image\Facades\Image::make($image)
@@ -108,15 +108,15 @@ class ProfileController extends ApiController
                         $constraint->upsize();
                     })
                     ->blur(15)
-                    ->save(public_path($blurredPath));
+                    ->save(base_path($blurredPath));
             } catch (\Exception $e) {
                 // Fallback: just move the file
-                $image->move(public_path('assets/admin/uploads/profiles'), "{$filename}.{$extension}");
+                $image->move(base_path('assets/admin/uploads/profiles'), "{$filename}.{$extension}");
                 $blurredPath = null;
             }
         } else {
             // No Intervention Image: just move the file
-            $image->move(public_path('assets/admin/uploads/profiles'), "{$filename}.{$extension}");
+            $image->move(base_path('assets/admin/uploads/profiles'), "{$filename}.{$extension}");
             $blurredPath = null;
         }
 
@@ -153,8 +153,8 @@ class ProfileController extends ApiController
         }
 
         // Delete files
-        $urlPath     = public_path(ltrim($image->url, '/'));
-        $blurredPath = $image->blurred_url ? public_path(ltrim($image->blurred_url, '/')) : null;
+        $urlPath     = base_path(ltrim($image->url, '/'));
+        $blurredPath = $image->blurred_url ? base_path(ltrim($image->blurred_url, '/')) : null;
 
         if (file_exists($urlPath)) {
             unlink($urlPath);
