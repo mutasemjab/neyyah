@@ -68,13 +68,13 @@
                                 <tr>
                                     <td><span class="badge badge-secondary">{{ $q->sort_order }}</span></td>
                                     <td style="max-width:320px;">
-                                        <span title="{{ $q->question_text }}">
-                                            {{ Str::limit($q->question_text, 80) }}
+                                        <span title="{{ $q->text_ar }}">
+                                            {{ Str::limit($q->text_ar, 80) }}
                                         </span>
                                     </td>
                                     <td>
-                                        @if ($q->category)
-                                            <span class="badge badge-light border">{{ $q->category }}</span>
+                                        @if ($q->category_ar)
+                                            <span class="badge badge-light border">{{ $q->category_ar }}</span>
                                         @else
                                             —
                                         @endif
