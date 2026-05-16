@@ -26,18 +26,18 @@
                 <div class="card-body">
                     <div class="row text-center mb-3">
                         <div class="col-5">
-                            <strong>{{ __('messages.User_A') }}</strong><br>
-                            <a href="{{ route('admin.users.show', $conversation->user_a_id) }}">
-                                {{ $conversation->userA->profile->display_name ?? $conversation->userA->phone }}
+                            <strong>{{ __('messages.User_1') }}</strong><br>
+                            <a href="{{ route('admin.users.show', $conversation->user1_id) }}">
+                                {{ $conversation->user1->display_name ?? $conversation->user1->phone }}
                             </a>
                         </div>
                         <div class="col-2 d-flex align-items-center justify-content-center">
                             <i class="fas fa-arrows-alt-h fa-2x text-muted"></i>
                         </div>
                         <div class="col-5">
-                            <strong>{{ __('messages.User_B') }}</strong><br>
-                            <a href="{{ route('admin.users.show', $conversation->user_b_id) }}">
-                                {{ $conversation->userB->profile->display_name ?? $conversation->userB->phone }}
+                            <strong>{{ __('messages.User_2') }}</strong><br>
+                            <a href="{{ route('admin.users.show', $conversation->user2_id) }}">
+                                {{ $conversation->user2->display_name ?? $conversation->user2->phone }}
                             </a>
                         </div>
                     </div>
@@ -62,21 +62,16 @@
                         @endif
                     </p>
 
-                    @if ($conversation->chat_unlocked_at)
-                    <p><strong>{{ __('messages.Chat_Expires_At') }}:</strong>
-                        {{ $conversation->chat_expires_at?->format('Y-m-d H:i') ?? '—' }}</p>
+                    @if ($conversation->expires_at)
+                    <p><strong>{{ __('messages.Expires_At') }}:</strong>
+                        {{ $conversation->expires_at->format('Y-m-d H:i') }}</p>
                     @endif
 
-                    <p><strong>{{ __('messages.Messages_Count') }}:</strong>
-                        <span class="badge badge-info">{{ $messagesCount }}</span></p>
+                    <p><strong>{{ __('messages.Answers_Count') }}:</strong>
+                        <span class="badge badge-info">{{ $answersCount }}</span></p>
 
-                    <p><strong>{{ __('messages.Last_Activity') }}:</strong>
-                        {{ $conversation->last_activity_at?->format('Y-m-d H:i') ?? '—' }}</p>
-
-                    <p><strong>{{ __('messages.Unread_A') }}:</strong>
-                        <span class="badge badge-warning">{{ $conversation->unread_count_a ?? 0 }}</span></p>
-                    <p><strong>{{ __('messages.Unread_B') }}:</strong>
-                        <span class="badge badge-warning">{{ $conversation->unread_count_b ?? 0 }}</span></p>
+                    <p><strong>{{ __('messages.Updated_At') }}:</strong>
+                        {{ $conversation->updated_at?->format('Y-m-d H:i') ?? '—' }}</p>
                 </div>
             </div>
         </div>
@@ -87,26 +82,26 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-6 text-center">
-                            <strong>{{ __('messages.User_A') }}</strong>
-                            <div class="display-4">{{ $conversation->guided_questions_answered_a ?? 0 }}</div>
+                            <strong>{{ __('messages.User_1') }}</strong>
+                            <div class="display-4">{{ $conversation->questions_completed_u1 }}</div>
                             <small class="text-muted">{{ __('messages.Guided_Questions') }}</small>
                         </div>
                         <div class="col-6 text-center">
-                            <strong>{{ __('messages.User_B') }}</strong>
-                            <div class="display-4">{{ $conversation->guided_questions_answered_b ?? 0 }}</div>
+                            <strong>{{ __('messages.User_2') }}</strong>
+                            <div class="display-4">{{ $conversation->questions_completed_u2 }}</div>
                             <small class="text-muted">{{ __('messages.Guided_Questions') }}</small>
                         </div>
                     </div>
                 </div>
             </div>
 
-            @if ($conversation->matchRequest)
+            @if ($conversation->request)
             <div class="card">
                 <div class="card-header"><h6 class="mb-0">{{ __('messages.Match_Request') }}</h6></div>
                 <div class="card-body">
                     <p><strong>{{ __('messages.Request_Status') }}:</strong>
-                        {{ __('messages.' . ucfirst($conversation->matchRequest->status)) }}</p>
-                    <a href="{{ route('admin.match-requests.show', $conversation->matchRequest->id) }}"
+                        {{ __('messages.' . ucfirst($conversation->request->status)) }}</p>
+                    <a href="{{ route('admin.match-requests.show', $conversation->request->id) }}"
                        class="btn btn-sm btn-outline-info">
                         {{ __('messages.Request_Details') }}
                     </a>

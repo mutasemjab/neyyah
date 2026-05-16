@@ -36,33 +36,42 @@
 
                         <div class="form-group">
                             <label>{{ __('messages.Question_Text') }} <span class="text-danger">*</span></label>
-                            <textarea name="question_text" class="form-control @error('question_text') is-invalid @enderror"
-                                      rows="4" required>{{ old('question_text') }}</textarea>
-                            @error('question_text')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                            <textarea name="text_ar" class="form-control @error('text_ar') is-invalid @enderror"
+                                      rows="4" required>{{ old('text_ar') }}</textarea>
+                            @error('text_ar')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                        </div>
+
+                        <div class="form-group">
+                            <label>{{ __('messages.Hint') }}</label>
+                            <input type="text" name="hint_ar" class="form-control @error('hint_ar') is-invalid @enderror"
+                                   value="{{ old('hint_ar') }}" maxlength="255">
+                            @error('hint_ar')<div class="invalid-feedback">{{ $message }}</div>@enderror
                         </div>
 
                         <div class="row">
-                            <div class="col-md-4">
+                            <div class="col-md-6">
                                 <div class="form-group">
                                     <label>{{ __('messages.Category') }}</label>
-                                    <input type="text" name="category" class="form-control"
-                                           value="{{ old('category') }}"
+                                    <input type="text" name="category_ar" class="form-control"
+                                           value="{{ old('category_ar') }}" maxlength="60"
                                            placeholder="{{ __('messages.Category') }}">
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-6">
                                 <div class="form-group">
                                     <label>{{ __('messages.Sort_Order') }}</label>
                                     <input type="number" name="sort_order" class="form-control"
                                            value="{{ old('sort_order', 0) }}" min="0">
                                 </div>
                             </div>
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label>{{ __('messages.Version') }}</label>
-                                    <input type="number" name="version" class="form-control"
-                                           value="{{ old('version', 1) }}" min="1">
-                                </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="custom-control custom-switch">
+                                <input type="checkbox" class="custom-control-input" id="is_active"
+                                       name="is_active" value="1"
+                                       {{ old('is_active', true) ? 'checked' : '' }}>
+                                <label class="custom-control-label" for="is_active">{{ __('messages.Active') }}</label>
                             </div>
                         </div>
 

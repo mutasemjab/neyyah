@@ -45,12 +45,12 @@
                             <thead class="thead-light">
                                 <tr>
                                     <th>#</th>
-                                    <th>{{ __('messages.User_A') }}</th>
-                                    <th>{{ __('messages.User_B') }}</th>
+                                    <th>{{ __('messages.User_1') }}</th>
+                                    <th>{{ __('messages.User_2') }}</th>
                                     <th>{{ __('messages.Stage') }}</th>
                                     <th>{{ __('messages.Chat_Unlocked') }}</th>
                                     <th>{{ __('messages.Guided_Questions_Progress') }}</th>
-                                    <th>{{ __('messages.Last_Activity') }}</th>
+                                    <th>{{ __('messages.Updated_At') }}</th>
                                     <th>{{ __('messages.Action') }}</th>
                                 </tr>
                             </thead>
@@ -59,13 +59,13 @@
                                 <tr>
                                     <td>{{ $conv->id }}</td>
                                     <td>
-                                        <a href="{{ route('admin.users.show', $conv->user_a_id) }}">
-                                            {{ $conv->userA->profile->display_name ?? $conv->userA->phone }}
+                                        <a href="{{ route('admin.users.show', $conv->user1_id) }}">
+                                            {{ $conv->user1->display_name ?? $conv->user1->phone }}
                                         </a>
                                     </td>
                                     <td>
-                                        <a href="{{ route('admin.users.show', $conv->user_b_id) }}">
-                                            {{ $conv->userB->profile->display_name ?? $conv->userB->phone }}
+                                        <a href="{{ route('admin.users.show', $conv->user2_id) }}">
+                                            {{ $conv->user2->display_name ?? $conv->user2->phone }}
                                         </a>
                                     </td>
                                     <td>
@@ -85,11 +85,11 @@
                                         @endif
                                     </td>
                                     <td>
-                                        <small>A: {{ $conv->guided_questions_answered_a ?? 0 }} / B: {{ $conv->guided_questions_answered_b ?? 0 }}</small>
+                                        <small>U1: {{ $conv->questions_completed_u1 }} / U2: {{ $conv->questions_completed_u2 }}</small>
                                     </td>
                                     <td>
                                         <small class="text-muted">
-                                            {{ $conv->last_activity_at?->diffForHumans() ?? '—' }}
+                                            {{ $conv->updated_at?->diffForHumans() ?? '—' }}
                                         </small>
                                     </td>
                                     <td>
