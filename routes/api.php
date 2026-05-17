@@ -3,10 +3,15 @@
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CityController;
 use App\Http\Controllers\Api\CoinsController;
+use App\Http\Controllers\Api\ConsultantController;
+use App\Http\Controllers\Api\ConsultationSessionController;
 use App\Http\Controllers\Api\ConversationController;
 use App\Http\Controllers\Api\DeviceController;
 use App\Http\Controllers\Api\MatchingController;
+use App\Http\Controllers\Api\MatchmakerController;
+use App\Http\Controllers\Api\MatchmakerPostController;
 use App\Http\Controllers\Api\NotificationController;
+use App\Http\Controllers\Api\PrivateMatchRequestController;
 use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\RequestController;
 use App\Http\Controllers\Api\SubscriptionController;
@@ -99,6 +104,82 @@ Route::prefix('v1')->group(function () {
         Route::prefix('devices')->group(function () {
             Route::post('token',         [DeviceController::class, 'store']);
             Route::delete('token',       [DeviceController::class, 'destroy']);
+        });
+
+        // ── Feature 1: Matchmaker Marketplace ────────────────────────────────
+
+        // Public-ish matchmaker browsing (authenticated users)
+        Route::prefix('matchmakers')->group(function () {
+            Route::get('',           [MatchmakerController::class, 'index']);
+            Route::get('my-profile', [MatchmakerController::class, 'myProfile']);
+            Route::post('apply',     [MatchmakerController::class, 'apply']);
+            Route::get('{id}',       [MatchmakerController::class, 'show']);
+        });
+
+        // Public post browsing
+        Route::prefix('matchmaker-posts')->group(function () {
+            Route::get('',              [MatchmakerPostController::class, 'index']);
+            Route::get('my-interests',  [MatchmakerPostController::class, 'myInterests']);
+            Route::get('{id}',          [MatchmakerPostController::class, 'show']);
+            Route::post('{id}/interest', [MatchmakerPostController::class, 'sendInterest']);
+        });
+
+        // Matchmaker-only routes
+        Route::middleware('is.matchmaker')->prefix('matchmaker')->group(function () {
+            // Posts management
+            Route::get('posts',                                      [MatchmakerPostController::class, 'myPosts']);
+            Route::post('posts',                                     [MatchmakerPostController::class, 'store']);
+            Route::put('posts/{id}',                                 [MatchmakerPostController::class, 'update']);
+            Route::delete('posts/{id}',                              [MatchmakerPostController::class, 'destroy']);
+            Route::get('posts/{id}/interests',                       [MatchmakerPostController::class, 'postInterests']);
+            Route::put('posts/{postId}/interests/{interestId}',      [MatchmakerPostController::class, 'respondToInterest']);
+
+            // Packages management
+            Route::post('packages',         [PrivateMatchRequestController::class, 'storePackage']);
+            Route::put('packages/{id}',     [PrivateMatchRequestController::class, 'updatePackage']);
+            Route::delete('packages/{id}',  [PrivateMatchRequestController::class, 'deletePackage']);
+
+            // Incoming private requests
+            Route::get('private-requests',                             [PrivateMatchRequestController::class, 'incomingRequests']);
+            Route::put('private-requests/{id}/status',                 [PrivateMatchRequestController::class, 'updateStatus']);
+            Route::post('private-requests/{id}/candidates',            [PrivateMatchRequestController::class, 'addCandidate']);
+        });
+
+        // ── Feature 2: Private Matchmaking ────────────────────────────────────
+
+        Route::prefix('private-requests')->group(function () {
+            Route::post('',                                      [PrivateMatchRequestController::class, 'store']);
+            Route::get('',                                       [PrivateMatchRequestController::class, 'myRequests']);
+            Route::get('{id}',                                   [PrivateMatchRequestController::class, 'show']);
+            Route::put('{id}/cancel',                            [PrivateMatchRequestController::class, 'cancel']);
+            Route::get('{id}/candidates',                        [PrivateMatchRequestController::class, 'myCandidates']);
+            Route::put('{id}/candidates/{candidateId}',          [PrivateMatchRequestController::class, 'respondToCandidate']);
+        });
+
+        // ── Feature 3: Consultation Sessions ──────────────────────────────────
+
+        Route::prefix('consultants')->group(function () {
+            Route::get('',                   [ConsultantController::class, 'index']);
+            Route::get('my-profile',         [ConsultantController::class, 'myProfile']);
+            Route::post('apply',             [ConsultantController::class, 'apply']);
+            Route::get('{id}',               [ConsultantController::class, 'show']);
+            Route::get('{id}/availability',  [ConsultantController::class, 'availability']);
+            Route::post('{id}/book',         [ConsultationSessionController::class, 'book']);
+        });
+
+        Route::prefix('sessions')->group(function () {
+            Route::get('',          [ConsultationSessionController::class, 'mySessions']);
+            Route::get('{id}',      [ConsultationSessionController::class, 'show']);
+            Route::put('{id}/cancel', [ConsultationSessionController::class, 'cancel']);
+            Route::post('{id}/review', [ConsultationSessionController::class, 'submitReview']);
+        });
+
+        // Consultant-only routes
+        Route::middleware('is.consultant')->prefix('consultant')->group(function () {
+            Route::get('sessions',               [ConsultationSessionController::class, 'consultantSessions']);
+            Route::put('sessions/{id}/status',   [ConsultationSessionController::class, 'updateSessionStatus']);
+            Route::post('availability',          [ConsultantController::class, 'storeAvailability']);
+            Route::delete('availability/{id}',   [ConsultantController::class, 'destroyAvailability']);
         });
     });
 });

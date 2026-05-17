@@ -77,6 +77,52 @@
                     </a>
                 </li>
 
+                {{-- ── Marketplace ── --}}
+                <li class="nav-header">سوق الوساطة والاستشارة</li>
+
+                <li class="nav-item">
+                    <a href="{{ route('admin.matchmakers.index') }}"
+                       class="nav-link {{ request()->routeIs('admin.matchmakers.*') ? 'active' : '' }}">
+                        <i class="fas fa-user-tie nav-icon"></i>
+                        <p>الوسطاء</p>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="{{ route('admin.consultants.index') }}"
+                       class="nav-link {{ request()->routeIs('admin.consultants.*') ? 'active' : '' }}">
+                        <i class="fas fa-user-md nav-icon"></i>
+                        <p>المستشارون</p>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="{{ route('admin.private-requests.index') }}"
+                       class="nav-link {{ request()->routeIs('admin.private-requests.*') ? 'active' : '' }}">
+                        <i class="fas fa-handshake nav-icon"></i>
+                        <p>الطلبات الخاصة</p>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="{{ route('admin.consultations.index') }}"
+                       class="nav-link {{ request()->routeIs('admin.consultations.*') ? 'active' : '' }}">
+                        <i class="fas fa-calendar-check nav-icon"></i>
+                        <p>الجلسات الاستشارية</p>
+                    </a>
+                </li>
+
+                {{-- ── Notifications ── --}}
+                <li class="nav-header">{{ __('messages.notifications') }}</li>
+
+                <li class="nav-item">
+                    <a href="{{ route('admin.notifications.index') }}"
+                       class="nav-link {{ request()->routeIs('admin.notifications.*') ? 'active' : '' }}">
+                        <i class="fas fa-bell nav-icon"></i>
+                        <p>{{ __('messages.Notifications') }}</p>
+                    </a>
+                </li>
+
                 {{-- ── Content Management ── --}}
                 <li class="nav-header">{{ __('messages.content_management') }}</li>
 

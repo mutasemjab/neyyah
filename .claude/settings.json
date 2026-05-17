@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//c/xampp/htdocs/neyyah/resources/views/admin/**)",
+      "Bash(php artisan *)",
+      "Bash(Get-ChildItem -Path \"c:\\\\xampp\\\\htdocs\\\\neyyah\" -Force)",
+      "Bash(Select-Object Name, PSIsContainer)",
+      "Bash(php -r ' *)"
+    ]
+  }
+}

@@ -9,7 +9,12 @@ use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\MatchRequestAdminController;
 use App\Http\Controllers\Admin\ConversationAdminController;
 use App\Http\Controllers\Admin\InterestController;
+use App\Http\Controllers\Admin\ConsultantAdminController;
+use App\Http\Controllers\Admin\ConsultationAdminController;
 use App\Http\Controllers\Admin\GuidedQuestionController;
+use App\Http\Controllers\Admin\MatchmakerAdminController;
+use App\Http\Controllers\Admin\NotificationController;
+use App\Http\Controllers\Admin\PrivateRequestAdminController;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 use Spatie\Permission\Models\Permission;
 
@@ -67,6 +72,34 @@ Route::group(['prefix' => LaravelLocalization::setLocale(), 'middleware' => ['lo
         // ── Interests ─────────────────────────────────────────────────────────
         Route::get('interests', [InterestController::class, 'index'])->name('admin.interests.index');
         Route::delete('interests/{label}', [InterestController::class, 'destroy'])->name('admin.interests.destroy')->where('label', '.+');
+
+        // ── Matchmakers ───────────────────────────────────────────────────────
+        Route::get('matchmakers', [MatchmakerAdminController::class, 'index'])->name('admin.matchmakers.index');
+        Route::get('matchmakers/{id}', [MatchmakerAdminController::class, 'show'])->name('admin.matchmakers.show');
+        Route::post('matchmakers/{id}/approve', [MatchmakerAdminController::class, 'approve'])->name('admin.matchmakers.approve');
+        Route::post('matchmakers/{id}/reject', [MatchmakerAdminController::class, 'reject'])->name('admin.matchmakers.reject');
+        Route::post('matchmakers/{id}/toggle', [MatchmakerAdminController::class, 'toggleActive'])->name('admin.matchmakers.toggle');
+
+        // ── Consultants ───────────────────────────────────────────────────────
+        Route::get('consultants', [ConsultantAdminController::class, 'index'])->name('admin.consultants.index');
+        Route::get('consultants/{id}', [ConsultantAdminController::class, 'show'])->name('admin.consultants.show');
+        Route::post('consultants/{id}/approve', [ConsultantAdminController::class, 'approve'])->name('admin.consultants.approve');
+        Route::post('consultants/{id}/reject', [ConsultantAdminController::class, 'reject'])->name('admin.consultants.reject');
+        Route::post('consultants/{id}/toggle', [ConsultantAdminController::class, 'toggleActive'])->name('admin.consultants.toggle');
+
+        // ── Private Match Requests ────────────────────────────────────────────
+        Route::get('private-requests', [PrivateRequestAdminController::class, 'index'])->name('admin.private-requests.index');
+        Route::get('private-requests/{id}', [PrivateRequestAdminController::class, 'show'])->name('admin.private-requests.show');
+
+        // ── Consultation Sessions ─────────────────────────────────────────────
+        Route::get('consultations', [ConsultationAdminController::class, 'index'])->name('admin.consultations.index');
+        Route::get('consultations/reviews', [ConsultationAdminController::class, 'reviews'])->name('admin.consultations.reviews');
+        Route::get('consultations/{id}', [ConsultationAdminController::class, 'show'])->name('admin.consultations.show');
+
+        // ── Notifications ─────────────────────────────────────────────────────
+        Route::get('notifications', [NotificationController::class, 'index'])->name('admin.notifications.index');
+        Route::post('notifications', [NotificationController::class, 'store'])->name('admin.notifications.store');
+        Route::get('notifications/search-users', [NotificationController::class, 'searchUsers'])->name('admin.notifications.search-users');
 
         // ── Guided Questions ──────────────────────────────────────────────────
         Route::get('guided-questions', [GuidedQuestionController::class, 'index'])->name('admin.guided-questions.index');

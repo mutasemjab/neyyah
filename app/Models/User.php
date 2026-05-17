@@ -162,4 +162,36 @@ class User extends Authenticatable
     {
         return $this->hasOne(IdentityVerification::class);
     }
+
+    // ── Matchmaker / Consultant relationships ──────
+
+    public function matchmakerProfile(): HasOne
+    {
+        return $this->hasOne(Matchmaker::class);
+    }
+
+    public function consultantProfile(): HasOne
+    {
+        return $this->hasOne(Consultant::class);
+    }
+
+    public function matchmakerInterests(): HasMany
+    {
+        return $this->hasMany(MatchmakerInterest::class);
+    }
+
+    public function privateMatchRequests(): HasMany
+    {
+        return $this->hasMany(PrivateMatchRequest::class);
+    }
+
+    public function consultationSessions(): HasMany
+    {
+        return $this->hasMany(ConsultationSession::class);
+    }
+
+    public function sessionReviews(): HasMany
+    {
+        return $this->hasMany(SessionReview::class);
+    }
 }

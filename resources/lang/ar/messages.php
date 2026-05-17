@@ -216,6 +216,23 @@ return [
   "New_Interest"          => "اهتمام جديد",
   "Edit_Interest"         => "تعديل الاهتمام",
 
+  // ── Notifications ─────────────────────────────────────────────────────
+  "notifications"           => "الإشعارات",
+  "Notifications"           => "الإشعارات",
+  "Send_Notification"       => "إرسال إشعار",
+  "Notification_Title"      => "العنوان",
+  "Notification_Body"       => "نص الإشعار",
+  "Target"                  => "المستهدفون",
+  "All_Users"               => "جميع المستخدمين",
+  "Specific_Users"          => "مستخدمون محددون",
+  "Select_Users"            => "اختر المستخدمين",
+  "Selected"                => "محدد",
+  "Select_All_Visible"      => "تحديد الكل الظاهر",
+  "Users_Count"             => "عدد المستلمين",
+  "Notification_History"    => "سجل الإرسال",
+  "Notification_Sent"       => "تم إرسال الإشعار بنجاح.",
+  "Loading"                 => "جارٍ التحميل",
+
   // ── Guided Questions ──────────────────────────────────────────────────────
   "Guided_Questions"      => "الأسئلة الإرشادية",
   "Guided_Question"       => "سؤال إرشادي",
