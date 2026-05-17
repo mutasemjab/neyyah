@@ -58,7 +58,6 @@ class NotificationService
             }
 
             $client = new \Google\Client();
-            
             $client->setAuthConfig($credentialsPath);
             $client->addScope('https://www.googleapis.com/auth/firebase.messaging');
             $client->useApplicationDefaultCredentials();
@@ -77,7 +76,7 @@ class NotificationService
                         'title' => $title,
                         'body'  => $body,
                     ],
-                    'data'    => array_map('strval', $data),
+                    'data'    => (object) array_map('strval', $data),
                     'android' => [
                         'priority' => 'high',
                     ],
