@@ -81,5 +81,7 @@ class Kernel extends HttpKernel
         'update.last.active' => \App\Http\Middleware\UpdateLastActive::class,
         'conversation.participant' => \App\Http\Middleware\ConversationParticipant::class,
         'profile.complete' => \App\Http\Middleware\EnsureProfileComplete::class,
+        'is.matchmaker' => \App\Http\Middleware\IsMatchmaker::class,
+        'is.consultant' => \App\Http\Middleware\IsConsultant::class,
     ];
 }

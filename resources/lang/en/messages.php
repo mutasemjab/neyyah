@@ -216,6 +216,23 @@ return [
   "New_Interest"          => "New Interest",
   "Edit_Interest"         => "Edit Interest",
 
+  // ── Notifications ─────────────────────────────────────────────────────
+  "notifications"           => "Notifications",
+  "Notifications"           => "Notifications",
+  "Send_Notification"       => "Send Notification",
+  "Notification_Title"      => "Title",
+  "Notification_Body"       => "Message",
+  "Target"                  => "Target",
+  "All_Users"               => "All Users",
+  "Specific_Users"          => "Specific Users",
+  "Select_Users"            => "Select Users",
+  "Selected"                => "Selected",
+  "Select_All_Visible"      => "Select all visible",
+  "Users_Count"             => "Users Reached",
+  "Notification_History"    => "Sent History",
+  "Notification_Sent"       => "Notification sent successfully.",
+  "Loading"                 => "Loading",
+
   // ── Guided Questions ──────────────────────────────────────────────────────
   "Guided_Questions"      => "Guided Questions",
   "Guided_Question"       => "Guided Question",
