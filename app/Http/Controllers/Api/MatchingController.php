@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Http\Requests\Api\UpdateMatchFiltersRequest;
 use App\Http\Resources\MatchFilterResource;
 use App\Http\Resources\MatchSuggestionResource;
+use App\Models\Conversation;
+use App\Models\MarriageRequest;
 use App\Models\MatchDismissal;
 use App\Models\MatchFilter;
 use App\Models\MatchView;
@@ -39,13 +41,27 @@ class MatchingController extends ApiController
             ->pluck('dismissed_user_id')
             ->toArray();
 
+        // Users involved in any marriage request with the current user (either direction, any status)
+        $requestedIds = MarriageRequest::where('from_user_id', $auth->id)->pluck('to_user_id')
+            ->merge(MarriageRequest::where('to_user_id', $auth->id)->pluck('from_user_id'))
+            ->unique()
+            ->toArray();
+
+        // Users already in a conversation with the current user
+        $conversationIds = Conversation::where('user1_id', $auth->id)->pluck('user2_id')
+            ->merge(Conversation::where('user2_id', $auth->id)->pluck('user1_id'))
+            ->unique()
+            ->toArray();
+
+        $excludedIds = array_unique(array_merge($dismissedIds, $requestedIds, $conversationIds));
+
         // Build query
         $query = User::with(['profileImages', 'interests', 'intentCard', 'privacySettings'])
             ->where('id', '!=', $auth->id)
             ->whereNotNull('gender')
             ->where('gender', $oppositeGender)
             ->whereNotNull('birth_date')
-            ->whereNotIn('id', $dismissedIds)
+            ->whereNotIn('id', $excludedIds)
             ->whereNull('deleted_at');
 
         // Apply age filter

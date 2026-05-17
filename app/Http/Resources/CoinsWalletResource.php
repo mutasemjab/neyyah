@@ -19,7 +19,7 @@ class CoinsWalletResource extends JsonResource
             'balance'              => $this->balance,
             'daily_free_used'      => $used,
             'daily_free_total'     => self::DAILY_FREE_TOTAL,
-            'daily_free_remaining' => $canClaimToday ? self::DAILY_FREE_TOTAL : 0,
+            'daily_free_remaining' => $remaining,
             'daily_free_reset_at'  => $this->daily_free_reset_at?->toIso8601String(),
             'can_claim_today'      => $canClaimToday,
         ];

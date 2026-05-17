@@ -19,9 +19,15 @@ class CoinService
             return false;
         }
 
-        $newBalance = $wallet->balance - $amount;
+        $newBalance  = $wallet->balance - $amount;
+        $dailyUsed   = $wallet->daily_free_used ?? 0;
+        $dailyRemaining = max(0, 5 - $dailyUsed);
+        $fromFree    = min($amount, $dailyRemaining);
 
-        $wallet->update(['balance' => $newBalance]);
+        $wallet->update([
+            'balance'         => $newBalance,
+            'daily_free_used' => $dailyUsed + $fromFree,
+        ]);
 
         CoinTransaction::create([
             'user_id'        => $user->id,
@@ -97,7 +103,7 @@ class CoinService
 
         $wallet->update([
             'balance'             => $newBalance,
-            'daily_free_used'     => $wallet->daily_free_used + 1,
+            'daily_free_used'     => 0,
             'daily_free_reset_at' => now()->addDay()->startOfDay(),
         ]);
 
