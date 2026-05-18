@@ -61,9 +61,9 @@
                                 @forelse ($data as $v)
                                 <tr>
                                     <td>{{ $v->id }}</td>
-                                    <td>{{ $v->user->profile->display_name ?? '—' }}</td>
-                                    <td>{{ $v->user->country_code }} {{ $v->user->phone }}</td>
-                                    <td>{{ __('messages.' . ($v->document_type === 'national_id' ? 'National_ID' : ucfirst($v->document_type ?? ''))) }}</td>
+                                    <td>{{ $v->user->display_name ?? '—' }}</td>
+                                    <td>{{ $v->user->phone }}</td>
+                                    <td>{{ __('messages.' . ($v->id_type === 'national_id' ? 'National_ID' : ucfirst($v->id_type ?? ''))) }}</td>
                                     <td>
                                         @if ($v->status === 'approved')
                                             <span class="badge badge-success">{{ __('messages.Approved') }}</span>

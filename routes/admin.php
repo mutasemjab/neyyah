@@ -53,6 +53,7 @@ Route::group(['prefix' => LaravelLocalization::setLocale(), 'middleware' => ['lo
         // ── Identity Verifications ────────────────────────────────────────────
         Route::get('verifications', [IdentityVerificationController::class, 'index'])->name('admin.verifications.index');
         Route::get('verifications/{id}', [IdentityVerificationController::class, 'show'])->name('admin.verifications.show');
+        Route::get('verifications/{id}/document/{type}', [IdentityVerificationController::class, 'document'])->name('admin.verifications.document');
         Route::post('verifications/{id}/approve', [IdentityVerificationController::class, 'approve'])->name('admin.verifications.approve');
         Route::post('verifications/{id}/reject', [IdentityVerificationController::class, 'reject'])->name('admin.verifications.reject');
 

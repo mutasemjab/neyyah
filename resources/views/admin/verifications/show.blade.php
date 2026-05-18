@@ -25,11 +25,11 @@
                 <div class="card-header"><h6 class="mb-0">{{ __('messages.User') }}</h6></div>
                 <div class="card-body">
                     <p><strong>{{ __('messages.Display_Name') }}:</strong>
-                        {{ $verification->user->profile->display_name ?? '—' }}</p>
+                        {{ $verification->user->display_name ?? '—' }}</p>
                     <p><strong>{{ __('messages.Phone') }}:</strong>
-                        {{ $verification->user->country_code }} {{ $verification->user->phone }}</p>
+                        {{ $verification->user->phone }}</p>
                     <p><strong>{{ __('messages.Document_Type') }}:</strong>
-                        {{ $verification->document_type ?? '—' }}</p>
+                        {{ $verification->id_type ?? '—' }}</p>
                     <p><strong>{{ __('messages.Status') }}:</strong>
                         @if ($verification->status === 'approved')
                             <span class="badge badge-success">{{ __('messages.Approved') }}</span>
@@ -85,8 +85,8 @@
                         @if ($verification->document_front_path)
                         <div class="col-md-4 mb-3">
                             <p class="font-weight-bold text-center">{{ __('messages.Document_Front') }}</p>
-                            <a href="{{ asset($verification->document_front_path) }}" target="_blank">
-                                <img src="{{ asset($verification->document_front_path) }}"
+                            <a href="{{ route('admin.verifications.document', [$verification->id, 'front']) }}" target="_blank">
+                                <img src="{{ route('admin.verifications.document', [$verification->id, 'front']) }}"
                                      class="img-fluid rounded border" alt="Front">
                             </a>
                         </div>
@@ -95,8 +95,8 @@
                         @if ($verification->document_back_path)
                         <div class="col-md-4 mb-3">
                             <p class="font-weight-bold text-center">{{ __('messages.Document_Back') }}</p>
-                            <a href="{{ asset($verification->document_back_path) }}" target="_blank">
-                                <img src="{{ asset($verification->document_back_path) }}"
+                            <a href="{{ route('admin.verifications.document', [$verification->id, 'back']) }}" target="_blank">
+                                <img src="{{ route('admin.verifications.document', [$verification->id, 'back']) }}"
                                      class="img-fluid rounded border" alt="Back">
                             </a>
                         </div>
@@ -105,8 +105,8 @@
                         @if ($verification->selfie_path)
                         <div class="col-md-4 mb-3">
                             <p class="font-weight-bold text-center">{{ __('messages.Selfie') }}</p>
-                            <a href="{{ asset($verification->selfie_path) }}" target="_blank">
-                                <img src="{{ asset($verification->selfie_path) }}"
+                            <a href="{{ route('admin.verifications.document', [$verification->id, 'selfie']) }}" target="_blank">
+                                <img src="{{ route('admin.verifications.document', [$verification->id, 'selfie']) }}"
                                      class="img-fluid rounded border" alt="Selfie">
                             </a>
                         </div>

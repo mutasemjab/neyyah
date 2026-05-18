@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Admin;
 use App\Models\IdentityVerification;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class IdentityVerificationController extends Controller
 {
@@ -25,7 +26,7 @@ class IdentityVerificationController extends Controller
 
         $statusFilter = $request->input('status', 'pending');
 
-        $data = IdentityVerification::with('user.profile')
+        $data = IdentityVerification::with('user')
             ->where('status', $statusFilter)
             ->latest()
             ->paginate(PAGINATION_COUNT);
@@ -39,9 +40,31 @@ class IdentityVerificationController extends Controller
             return redirect()->back()->with('error', __('messages.Access Denied'));
         }
 
-        $verification = IdentityVerification::with('user.profile')->findOrFail($id);
+        $verification = IdentityVerification::with('user')->findOrFail($id);
 
         return view('admin.verifications.show', compact('verification'));
+    }
+
+    public function document(int $id, string $type)
+    {
+        if (!$this->admin()->can('verifications-index')) {
+            abort(403);
+        }
+
+        $verification = IdentityVerification::findOrFail($id);
+
+        $path = match ($type) {
+            'front'  => $verification->document_front_path,
+            'back'   => $verification->document_back_path,
+            'selfie' => $verification->selfie_path,
+            default  => null,
+        };
+
+        if (!$path || !Storage::disk('local')->exists($path)) {
+            abort(404);
+        }
+
+        return response()->file(Storage::disk('local')->path($path));
     }
 
     public function approve(int $id)
@@ -53,6 +76,7 @@ class IdentityVerificationController extends Controller
         $verification = IdentityVerification::findOrFail($id);
         $verification->update([
             'status'      => 'approved',
+            'reviewed_by' => $this->admin()->id,
             'reviewed_at' => now(),
         ]);
         $verification->user->update(['is_verified' => true]);
@@ -69,8 +93,10 @@ class IdentityVerificationController extends Controller
 
         $request->validate(['rejection_reason' => 'required|string|max:500']);
 
-        IdentityVerification::findOrFail($id)->update([
+        $verification = IdentityVerification::findOrFail($id);
+        $verification->update([
             'status'           => 'rejected',
+            'reviewed_by'      => $this->admin()->id,
             'rejection_reason' => $request->rejection_reason,
             'reviewed_at'      => now(),
         ]);
