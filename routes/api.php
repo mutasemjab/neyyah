@@ -17,6 +17,7 @@ use App\Http\Controllers\Api\MatchmakerPostController;
 use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\PrivateMatchRequestController;
 use App\Http\Controllers\Api\ProfileController;
+use App\Http\Controllers\Api\ProfileVisitController;
 use App\Http\Controllers\Api\RequestController;
 use App\Http\Controllers\Api\SubscriptionController;
 use Illuminate\Support\Facades\Route;
@@ -89,6 +90,10 @@ Route::prefix('v1')->group(function () {
             Route::post('',             [BlockController::class, 'store']);
             Route::delete('{user_id}',  [BlockController::class, 'destroy']);
         });
+
+        // Profile visits
+        Route::post('profile-visits',          [ProfileVisitController::class, 'store']);
+        Route::get('profile-visits/received',  [ProfileVisitController::class, 'received']);
 
         // Support
         Route::post('support', [SupportController::class, 'store']);
