@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CityController;
 use App\Http\Controllers\Api\CoinsController;
+use App\Http\Controllers\Api\VerificationController;
 use App\Http\Controllers\Api\ConsultantController;
 use App\Http\Controllers\Api\ConsultationSessionController;
 use App\Http\Controllers\Api\ConversationController;
@@ -76,6 +77,12 @@ Route::prefix('v1')->group(function () {
                 Route::put('{id}/stage',                   [ConversationController::class, 'updateStage']);
                 Route::put('{id}/last-activity',           [ConversationController::class, 'updateActivity']);
             });
+        });
+
+        // Identity Verification
+        Route::prefix('verification')->group(function () {
+            Route::get('',    [VerificationController::class, 'status']);
+            Route::post('',   [VerificationController::class, 'submit']);
         });
 
         // Coins
