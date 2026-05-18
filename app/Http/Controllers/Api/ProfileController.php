@@ -6,7 +6,9 @@ use App\Http\Requests\Api\UpdateIntentCardRequest;
 use App\Http\Requests\Api\UpdatePrivacyRequest;
 use App\Http\Requests\Api\UpdateProfileRequest;
 use App\Http\Requests\Api\UploadImageRequest;
+use App\Http\Resources\PrivacySettingResource;
 use App\Http\Resources\UserResource;
+use App\Models\Block;
 use App\Models\IntentCard;
 use App\Models\MatchDismissal;
 use App\Models\PrivacySetting;
@@ -197,12 +199,12 @@ class ProfileController extends ApiController
     {
         $user = $request->user();
 
-        $user->privacySettings()->updateOrCreate(
+        $settings = $user->privacySettings()->updateOrCreate(
             ['user_id' => $user->id],
             $request->validated()
         );
 
-        return $this->success([], 'تم تحديث إعدادات الخصوصية بنجاح.');
+        return $this->success(new PrivacySettingResource($settings), 'تم تحديث إعدادات الخصوصية بنجاح.');
     }
 
     /**
@@ -216,6 +218,17 @@ class ProfileController extends ApiController
 
         if (!$candidate) {
             return $this->error('المستخدم غير موجود.', 404);
+        }
+
+        // Block check: either party has blocked the other
+        $isBlocked = Block::where(function ($q) use ($auth, $id) {
+            $q->where('blocker_id', $auth->id)->where('blocked_id', $id);
+        })->orWhere(function ($q) use ($auth, $id) {
+            $q->where('blocker_id', $id)->where('blocked_id', $auth->id);
+        })->exists();
+
+        if ($isBlocked) {
+            return $this->error('المستخدم غير متاح.', 403);
         }
 
         $compatibility = $this->matchingService->calculateCompatibility($auth, $candidate);

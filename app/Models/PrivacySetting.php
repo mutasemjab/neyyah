@@ -21,15 +21,21 @@ class PrivacySetting extends Model
         'hide_real_name',
         'show_last_active',
         'allow_location_detect',
+        'show_age',
+        'show_city',
+        'show_photos_to_matches_only',
     ];
 
     protected $casts = [
-        'hide_from_contacts'   => 'boolean',
-        'anonymous_browsing'   => 'boolean',
-        'blur_images'          => 'boolean',
-        'hide_real_name'       => 'boolean',
-        'show_last_active'     => 'boolean',
-        'allow_location_detect'=> 'boolean',
+        'hide_from_contacts'         => 'boolean',
+        'anonymous_browsing'         => 'boolean',
+        'blur_images'                => 'boolean',
+        'hide_real_name'             => 'boolean',
+        'show_last_active'           => 'boolean',
+        'allow_location_detect'      => 'boolean',
+        'show_age'                   => 'boolean',
+        'show_city'                  => 'boolean',
+        'show_photos_to_matches_only'=> 'boolean',
     ];
 
     protected static function boot(): void

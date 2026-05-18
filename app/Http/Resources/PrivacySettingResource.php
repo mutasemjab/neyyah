@@ -13,12 +13,15 @@ class PrivacySettingResource extends JsonResource
         }
 
         return [
-            'hide_from_contacts'    => $this->hide_from_contacts,
-            'anonymous_browsing'    => $this->anonymous_browsing,
-            'blur_images'           => $this->blur_images,
-            'hide_real_name'        => $this->hide_real_name,
-            'show_last_active'      => $this->show_last_active,
-            'allow_location_detect' => $this->allow_location_detect,
+            'show_age'                   => (bool) ($this->show_age ?? true),
+            'show_city'                  => (bool) ($this->show_city ?? true),
+            'show_photos_to_matches_only'=> (bool) ($this->show_photos_to_matches_only ?? false),
+            'hide_from_contacts'         => (bool) ($this->hide_from_contacts ?? true),
+            'anonymous_browsing'         => (bool) ($this->anonymous_browsing ?? false),
+            'show_last_active'           => (bool) ($this->show_last_active ?? false),
+            'blur_images'                => (bool) ($this->blur_images ?? true),
+            'hide_real_name'             => (bool) ($this->hide_real_name ?? true),
+            'allow_location_detect'      => (bool) ($this->allow_location_detect ?? true),
         ];
     }
 }

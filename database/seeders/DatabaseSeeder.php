@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
             CitiesSeeder::class,
             GuidedQuestionsSeeder::class,
             SubscriptionPackagesSeeder::class,
+            ContentPagesSeeder::class,
         ]);
     }
 }

@@ -5,10 +5,10 @@ namespace App\Http\Controllers\Api;
 use App\Http\Requests\Api\UpdateMatchFiltersRequest;
 use App\Http\Resources\MatchFilterResource;
 use App\Http\Resources\MatchSuggestionResource;
+use App\Models\Block;
 use App\Models\Conversation;
 use App\Models\MarriageRequest;
 use App\Models\MatchDismissal;
-use App\Models\MatchFilter;
 use App\Models\MatchView;
 use App\Models\User;
 use App\Services\CoinService;
@@ -53,7 +53,13 @@ class MatchingController extends ApiController
             ->unique()
             ->toArray();
 
-        $excludedIds = array_unique(array_merge($dismissedIds, $requestedIds, $conversationIds));
+        // Users blocked by or who have blocked the current user (both directions)
+        $blockedIds = Block::where('blocker_id', $auth->id)->pluck('blocked_id')
+            ->merge(Block::where('blocked_id', $auth->id)->pluck('blocker_id'))
+            ->unique()
+            ->toArray();
+
+        $excludedIds = array_unique(array_merge($dismissedIds, $requestedIds, $conversationIds, $blockedIds));
 
         // Build query
         $query = User::with(['profileImages', 'interests', 'intentCard', 'privacySettings'])
@@ -153,10 +159,14 @@ class MatchingController extends ApiController
             return $this->error('رصيدك من العملات غير كافٍ.', 402);
         }
 
-        MatchView::create([
-            'viewer_id' => $auth->id,
-            'viewed_id' => $userId,
-        ]);
+        // Skip recording the view if the viewer has anonymous browsing enabled
+        $isAnonymous = $auth->privacySettings?->anonymous_browsing ?? false;
+        if (!$isAnonymous) {
+            MatchView::create([
+                'viewer_id' => $auth->id,
+                'viewed_id' => $userId,
+            ]);
+        }
 
         return $this->success([], 'تم تسجيل المشاهدة بنجاح.');
     }

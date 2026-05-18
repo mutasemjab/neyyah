@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Conversation;
 use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -29,11 +30,36 @@ class UserResource extends JsonResource
             $lastActiveAt = $this->last_active_at?->toIso8601String();
         }
 
+        $showAge  = $isOwnProfile || ($privacy?->show_age  ?? true);
+        $showCity = $isOwnProfile || ($privacy?->show_city ?? true);
+
+        // Determine whether the viewer can see unblurred photos
+        $photosToMatchesOnly = !$isOwnProfile && ($privacy?->show_photos_to_matches_only ?? false);
+        $viewerIsMatch       = false;
+        if ($photosToMatchesOnly) {
+            $viewerId    = auth()->id();
+            $viewerIsMatch = Conversation::where(function ($q) use ($viewerId) {
+                $q->where('user1_id', $viewerId)->orWhere('user2_id', $viewerId);
+            })->where(function ($q) {
+                $q->where('user1_id', $this->id)->orWhere('user2_id', $this->id);
+            })->exists();
+        }
+        $showOriginalPhotos = $isOwnProfile || !$photosToMatchesOnly || $viewerIsMatch;
+
+        // Build images: replace url with blurred_url when originals are restricted
+        $images = $this->whenLoaded('profileImages', function () use ($showOriginalPhotos) {
+            return $this->profileImages->map(fn ($img) => [
+                'url'         => $showOriginalPhotos ? $img->url : ($img->blurred_url ?? $img->url),
+                'blurred_url' => $img->blurred_url,
+                'sort_order'  => $img->sort_order,
+            ])->values();
+        });
+
         return [
             'id'                    => $this->id,
             'display_name'          => $displayName,
-            'age'                   => $this->birth_date ? Carbon::parse($this->birth_date)->age : null,
-            'city'                  => $this->city,
+            'age'                   => $showAge && $this->birth_date ? Carbon::parse($this->birth_date)->age : null,
+            'city'                  => $showCity ? $this->city : null,
             'country'               => 'الأردن',
             'gender'                => $this->gender,
             'bio'                   => $this->bio,
@@ -47,10 +73,10 @@ class UserResource extends JsonResource
             'is_ready_for_marriage' => $this->is_ready_for_marriage,
             'is_verified'           => $this->is_verified,
             'last_active_at'        => $lastActiveAt,
-            'images'                => ProfileImageResource::collection($this->whenLoaded('profileImages')),
+            'images'                => $images,
             'interests'             => $this->whenLoaded('interests', fn () => $this->interests->pluck('label')),
             'intent_card'           => new IntentCardResource($this->whenLoaded('intentCard')),
-            'privacy'               => $isOwnProfile ? new PrivacySettingResource($this->whenLoaded('privacySettings')) : null,
+            'privacy_settings'      => $isOwnProfile ? new PrivacySettingResource($this->whenLoaded('privacySettings')) : null,
             'firebase_uid'          => $isOwnProfile ? $this->firebase_uid : null,
         ];
     }

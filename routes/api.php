@@ -1,8 +1,11 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\BlockController;
 use App\Http\Controllers\Api\CityController;
 use App\Http\Controllers\Api\CoinsController;
+use App\Http\Controllers\Api\ContentController;
+use App\Http\Controllers\Api\SupportController;
 use App\Http\Controllers\Api\VerificationController;
 use App\Http\Controllers\Api\ConsultantController;
 use App\Http\Controllers\Api\ConsultationSessionController;
@@ -24,6 +27,7 @@ Route::prefix('v1')->group(function () {
     Route::post('auth/send-otp',   [AuthController::class, 'sendOtp'])->middleware('throttle:5,1');
     Route::post('auth/verify-otp', [AuthController::class, 'verifyOtp']);
     Route::get('cities',           [CityController::class, 'index']);
+    Route::get('content',          [ContentController::class, 'show']);
 
     // ── Protected routes ──────────────────────────
     Route::middleware(['auth:api', 'update.last.active', 'throttle:60,1'])->group(function () {
@@ -78,6 +82,16 @@ Route::prefix('v1')->group(function () {
                 Route::put('{id}/last-activity',           [ConversationController::class, 'updateActivity']);
             });
         });
+
+        // Blocks
+        Route::prefix('blocks')->group(function () {
+            Route::get('',              [BlockController::class, 'index']);
+            Route::post('',             [BlockController::class, 'store']);
+            Route::delete('{user_id}',  [BlockController::class, 'destroy']);
+        });
+
+        // Support
+        Route::post('support', [SupportController::class, 'store']);
 
         // Identity Verification
         Route::prefix('verification')->group(function () {
