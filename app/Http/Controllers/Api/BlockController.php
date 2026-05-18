@@ -23,7 +23,7 @@ class BlockController extends ApiController
                 'id'           => $b->id,
                 'blocked_user' => $b->blocked ? [
                     'id'           => $b->blocked->id,
-                    'display_name' => $b->blocked->display_name,
+                    'display_name' => $b->blocked->display_name ?: 'مستخدم',
                     'age'          => $b->blocked->birth_date
                         ? Carbon::parse($b->blocked->birth_date)->age
                         : null,

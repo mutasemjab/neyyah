@@ -14,7 +14,7 @@ class MatchmakerInterestResource extends JsonResource
             'user_id'      => $this->user_id,
             'user'         => $this->whenLoaded('user', fn () => [
                 'id'           => $this->user->id,
-                'display_name' => $this->user->display_name,
+                'display_name' => $this->user->display_name ?: 'مستخدم',
                 'city'         => $this->user->city,
             ]),
             'note_ar'      => $this->note_ar,

@@ -20,9 +20,10 @@ class UserResource extends JsonResource
             $privacy = $this->privacySettings;
         }
 
-        $displayName = $this->display_name;
-        if (!$isOwnProfile && $privacy?->hide_real_name && $this->display_name) {
-            $displayName = mb_substr($this->display_name, 0, 1) . '.';
+        $rawName     = ($this->display_name !== null && $this->display_name !== '') ? $this->display_name : null;
+        $displayName = $rawName ?? 'مستخدم';
+        if (!$isOwnProfile && $privacy?->hide_real_name && $rawName) {
+            $displayName = mb_substr($rawName, 0, 1) . '.';
         }
 
         $lastActiveAt = null;
