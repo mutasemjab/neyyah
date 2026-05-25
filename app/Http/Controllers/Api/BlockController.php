@@ -20,7 +20,7 @@ class BlockController extends ApiController
             ->latest()
             ->get()
             ->map(fn (Block $b) => [
-                'id'           => $b->id,
+                'id'           => (string) $b->id,
                 'blocked_user' => $b->blocked ? [
                     'id'           => $b->blocked->id,
                     'display_name' => $b->blocked->display_name ?: 'مستخدم',
@@ -57,7 +57,7 @@ class BlockController extends ApiController
             'blocked_id' => $userId,
         ]);
 
-        return $this->success([], 'تم حظر المستخدم بنجاح.', 201);
+        return $this->success(null, 'تم حظر المستخدم بنجاح.', 201);
     }
 
     /**

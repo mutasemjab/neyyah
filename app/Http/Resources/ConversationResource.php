@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Block;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ConversationResource extends JsonResource
@@ -11,13 +12,16 @@ class ConversationResource extends JsonResource
         $authId    = auth()->id();
         $partnerId = $this->getPartnerId($authId);
 
-        $partner = $this->user1_id === $authId ? $this->whenLoaded('user2') : $this->whenLoaded('user1');
-        $partnerModel = $this->user1_id === $authId ? $this->user2 : $this->user1;
+        $partnerModel        = $this->user1_id === $authId ? $this->user2 : $this->user1;
+        $isBlockedByPartner  = $partnerId
+            ? Block::where('blocker_id', $partnerId)->where('blocked_id', $authId)->exists()
+            : false;
 
         return [
             'id'                      => $this->id,
             'partner_id'              => $partnerId,
             'partner'                 => $partnerModel ? new UserResource($partnerModel) : null,
+            'is_blocked_by_partner'   => $isBlockedByPartner,
             'stage'                   => $this->stage,
             'questions_completed_u1'  => $this->questions_completed_u1,
             'questions_completed_u2'  => $this->questions_completed_u2,

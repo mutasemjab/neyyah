@@ -25,12 +25,12 @@ class ProfileVisitController extends ApiController
 
         // Don't record self-visits
         if ($visited === $auth->id) {
-            return $this->success([]);
+            return $this->success(null);
         }
 
         // Don't record if the visitor has anonymous browsing enabled
         if ($auth->privacySettings?->anonymous_browsing ?? false) {
-            return $this->success([]);
+            return $this->success(null);
         }
 
         ProfileVisit::create([
@@ -38,7 +38,7 @@ class ProfileVisitController extends ApiController
             'visited_user_id' => $visited,
         ]);
 
-        return $this->success([]);
+        return $this->success(null);
     }
 
     /**
@@ -73,6 +73,6 @@ class ProfileVisitController extends ApiController
                 'visited_at' => $v->visited_at->toIso8601String(),
             ]);
 
-        return $this->success(['data' => $visits]);
+        return $this->success($visits);
     }
 }
