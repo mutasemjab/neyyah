@@ -8,6 +8,7 @@ use App\Http\Resources\ConversationResource;
 use App\Http\Resources\ConversationSummaryResource;
 use App\Http\Resources\GuidedAnswerResource;
 use App\Http\Resources\GuidedQuestionResource;
+use App\Models\Block;
 use App\Models\Conversation;
 use App\Models\GuidedAnswer;
 use App\Models\GuidedQuestion;
@@ -26,12 +27,25 @@ class ConversationController extends ApiController
      */
     public function index(Request $request): JsonResponse
     {
-        $userId        = $request->user()->id;
-        $conversations = Conversation::with(['user1.profileImages', 'user2.profileImages'])
-            ->where('user1_id', $userId)
-            ->orWhere('user2_id', $userId)
-            ->orderByDesc('updated_at')
-            ->paginate(20);
+        $userId = $request->user()->id;
+
+        // Collect all blocked user IDs in both directions
+        $blockedIds = Block::where('blocker_id', $userId)->pluck('blocked_id')
+            ->merge(Block::where('blocked_id', $userId)->pluck('blocker_id'))
+            ->unique()
+            ->toArray();
+
+        $query = Conversation::with(['user1.profileImages', 'user2.profileImages'])
+            ->where(function ($q) use ($userId) {
+                $q->where('user1_id', $userId)->orWhere('user2_id', $userId);
+            });
+
+        if (!empty($blockedIds)) {
+            $query->whereNotIn('user1_id', $blockedIds)
+                  ->whereNotIn('user2_id', $blockedIds);
+        }
+
+        $conversations = $query->orderByDesc('updated_at')->paginate(20);
 
         return $this->success([
             'data'         => ConversationSummaryResource::collection($conversations->items()),

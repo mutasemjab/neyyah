@@ -228,7 +228,7 @@ class ProfileController extends ApiController
         })->exists();
 
         if ($isBlocked) {
-            return $this->error('المستخدم غير متاح.', 403);
+            return $this->error('المستخدم غير موجود.', 404);
         }
 
         $compatibility = $this->matchingService->calculateCompatibility($auth, $candidate);
