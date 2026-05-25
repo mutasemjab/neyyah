@@ -77,7 +77,7 @@ class UserResource extends JsonResource
             'images'                => $images,
             'interests'             => $this->whenLoaded('interests', fn () => $this->interests->pluck('label')),
             'intent_card'           => new IntentCardResource($this->whenLoaded('intentCard')),
-            'privacy_settings'      => $isOwnProfile ? new PrivacySettingResource($this->whenLoaded('privacySettings')) : null,
+            'privacy_settings'      => new PrivacySettingResource($this->whenLoaded('privacySettings')),
             'firebase_uid'          => $isOwnProfile ? $this->firebase_uid : null,
         ];
     }
