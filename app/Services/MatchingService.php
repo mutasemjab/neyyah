@@ -96,8 +96,11 @@ class MatchingService
      */
     public function recalculateCompletion(User $user): float
     {
+        // Points breakdown (total = 100):
+        // display_name(10) birth_date(10) gender(5) city(5) bio(10)
+        // religiosity_level(8) education_level(7) income_range(5) marriage_timeline(8)
+        // 1+ images(10) intentCard(15) 3+ interests(7)
         $points = 0;
-        $total  = 100;
 
         if ($user->display_name) {
             $points += 10;
@@ -105,6 +108,10 @@ class MatchingService
 
         if ($user->birth_date) {
             $points += 10;
+        }
+
+        if ($user->gender) {
+            $points += 5;
         }
 
         if ($user->city) {
@@ -131,27 +138,28 @@ class MatchingService
             $points += 8;
         }
 
-        $imageCount = $user->profileImages()->count();
+        // Use loaded collection to avoid extra DB query
+        $imageCount = $user->relationLoaded('profileImages')
+            ? $user->profileImages->count()
+            : $user->profileImages()->count();
 
         if ($imageCount >= 1) {
             $points += 10;
-        }
-
-        if ($imageCount >= 3) {
-            $points += 5;
         }
 
         if ($user->intentCard) {
             $points += 15;
         }
 
-        $interestCount = $user->interests()->count();
+        $interestCount = $user->relationLoaded('interests')
+            ? $user->interests->count()
+            : $user->interests()->count();
 
         if ($interestCount >= 3) {
             $points += 7;
         }
 
-        return round($points / $total, 4);
+        return round($points / 100, 4);
     }
 
     /**

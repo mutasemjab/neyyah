@@ -9,15 +9,17 @@ use App\Models\CoinsWallet;
 use App\Models\OtpCode;
 use App\Models\PrivacySetting;
 use App\Models\User;
+use App\Services\MatchingService;
 use App\Services\SmsService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class AuthController extends ApiController
 {
-    public function __construct(private SmsService $smsService)
-    {
+    public function __construct(
+        private SmsService $smsService,
+        private MatchingService $matchingService,
+    ) {
     }
 
     /**
@@ -103,6 +105,9 @@ class AuthController extends ApiController
         $token = $user->createToken('api-token')->accessToken;
 
         $user->load(['profileImages', 'interests', 'intentCard', 'privacySettings', 'wallet']);
+
+        // Always recalculate so the login response reflects fresh completion_pct
+        $this->matchingService->recalculateAndSave($user);
 
         return $this->success([
             'token'    => $token,
