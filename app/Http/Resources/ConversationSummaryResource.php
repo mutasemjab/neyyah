@@ -17,8 +17,9 @@ class ConversationSummaryResource extends JsonResource
             'partner'         => $partnerModel ? new UserResource($partnerModel) : null,
             'stage'           => $this->stage,
             'is_chat_unlocked'=> $this->is_chat_unlocked,
-            'expires_at'      => $this->expires_at?->toIso8601String(),
-            'updated_at'      => $this->updated_at?->toIso8601String(),
+            'expires_at'       => $this->expires_at?->toIso8601String(),
+            'last_activity_at' => $this->updated_at?->toIso8601String(),
+            'updated_at'       => $this->updated_at?->toIso8601String(),
         ];
     }
 }

@@ -39,6 +39,9 @@ class Conversation extends Model
 
         static::creating(function ($model) {
             $model->id = (string) Str::ulid();
+            if (empty($model->expires_at)) {
+                $model->expires_at = now()->addDays(14);
+            }
         });
     }
 
