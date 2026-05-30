@@ -56,8 +56,19 @@ class UserResource extends JsonResource
             ])->values();
         });
 
+        $role = null;
+        if ($isOwnProfile) {
+            $role = 'user';
+            if ($this->relationLoaded('matchmakerProfile') && $this->matchmakerProfile) {
+                $role = 'matchmaker';
+            } elseif ($this->relationLoaded('consultantProfile') && $this->consultantProfile) {
+                $role = 'consultant';
+            }
+        }
+
         return [
             'id'                    => $this->id,
+            'role'                  => $role,
             'display_name'          => $displayName,
             'age'                   => $showAge && $this->birth_date ? Carbon::parse($this->birth_date)->age : null,
             'city'                  => $showCity ? $this->city : null,

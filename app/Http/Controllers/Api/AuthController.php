@@ -104,7 +104,7 @@ class AuthController extends ApiController
         // Issue Passport token
         $token = $user->createToken('api-token')->accessToken;
 
-        $user->load(['profileImages', 'interests', 'intentCard', 'privacySettings', 'wallet']);
+        $user->load(['profileImages', 'interests', 'intentCard', 'privacySettings', 'wallet', 'matchmakerProfile', 'consultantProfile']);
 
         // Always recalculate so the login response reflects fresh completion_pct
         $this->matchingService->recalculateAndSave($user);

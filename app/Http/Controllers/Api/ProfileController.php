@@ -37,6 +37,8 @@ class ProfileController extends ApiController
             'privacySettings',
             'wallet',
             'matchFilters',
+            'matchmakerProfile',
+            'consultantProfile',
         ]);
 
         return $this->success(new UserResource($user));
