@@ -14,6 +14,7 @@ class ApplyConsultantRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'display_name'      => 'nullable|string|max:60',
             'title_ar'          => 'required|string|max:200',
             'specializations'   => 'nullable|array',
             'specializations.*' => 'string|max:100',

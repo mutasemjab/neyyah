@@ -92,6 +92,10 @@ class ConsultantController extends ApiController
             return $this->error('لديك ملف مستشار مسجّل مسبقاً.', 422);
         }
 
+        if ($request->filled('display_name')) {
+            $user->update(['display_name' => $request->display_name]);
+        }
+
         $consultant = Consultant::create([
             'user_id'             => $user->id,
             'title_ar'            => $request->title_ar,

@@ -58,11 +58,12 @@ class UserResource extends JsonResource
 
         $role = null;
         if ($isOwnProfile) {
-            $role = 'user';
             if ($this->relationLoaded('matchmakerProfile') && $this->matchmakerProfile) {
                 $role = 'matchmaker';
             } elseif ($this->relationLoaded('consultantProfile') && $this->consultantProfile) {
                 $role = 'consultant';
+            } else {
+                $role = 'user';
             }
         }
 

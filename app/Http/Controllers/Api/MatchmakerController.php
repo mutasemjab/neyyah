@@ -72,6 +72,10 @@ class MatchmakerController extends ApiController
             return $this->error('لديك طلب وساطة مسجّل مسبقاً.', 422);
         }
 
+        if ($request->filled('display_name')) {
+            $user->update(['display_name' => $request->display_name]);
+        }
+
         $matchmaker = Matchmaker::create([
             'user_id'             => $user->id,
             'bio_ar'              => $request->bio_ar,
